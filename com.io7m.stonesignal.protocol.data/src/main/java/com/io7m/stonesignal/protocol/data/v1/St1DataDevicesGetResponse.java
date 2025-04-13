@@ -14,11 +14,33 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
+package com.io7m.stonesignal.protocol.data.v1;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.util.Map;
+import java.util.UUID;
+
 /**
- * Position recorder (Server [Device API])
+ * The response to getting devices.
  */
 
-@Version("1.0.0")
-package com.io7m.stonesignal.server.device_api_v1;
+// CHECKSTYLE:OFF
 
-import org.osgi.annotation.versioning.Version;
+@JsonSerialize
+@JsonDeserialize
+public record St1DataDevicesGetResponse(
+  @JsonProperty("Devices")
+  @JsonPropertyDescription("The devices by ID.")
+  Map<UUID, String> devices)
+  implements St1DataMessageType
+{
+  public St1DataDevicesGetResponse
+  {
+    devices = Map.copyOf(devices);
+  }
+}

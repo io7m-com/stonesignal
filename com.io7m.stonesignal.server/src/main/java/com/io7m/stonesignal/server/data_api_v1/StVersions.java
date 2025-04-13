@@ -15,13 +15,13 @@
  */
 
 
-package com.io7m.stonesignal.server.admin_api_v1;
+package com.io7m.stonesignal.server.data_api_v1;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.databind.CBORMapper;
 import com.io7m.repetoir.core.RPServiceDirectoryType;
-import com.io7m.stonesignal.protocol.admin.v1.St1AdminError;
+import com.io7m.stonesignal.protocol.device.v1.St1DeviceError;
 import com.io7m.stonesignal.server.StVersion;
 import com.io7m.stonesignal.server.http.StFormat;
 import com.io7m.stonesignal.server.http.StHTTPServerRequestContextExtractor;
@@ -124,11 +124,11 @@ public final class StVersions implements Handler
       new VProtocols(
         List.of(
           new VProtocol(
-            "com.io7m.stonesignal.admin",
+            "com.io7m.stonesignal.data",
             BigInteger.ONE,
             BigInteger.ZERO,
             URI.create("/1/0/"),
-            "Stonesignal 1.0 Admin API"
+            "Stonesignal 1.0 Data API"
           )
         )
       );
@@ -231,9 +231,9 @@ public final class StVersions implements Handler
       switch (this.format) {
         case JSON -> {
           response.send(
-            St1AdminProtocolMapperJSON.get()
+            St1DataProtocolMapperJSON.get()
               .writeValueAsBytes(
-                new St1AdminError(
+                new St1DeviceError(
                   "error-" + code,
                   exception.getMessage()
                 )
@@ -242,9 +242,9 @@ public final class StVersions implements Handler
         }
         case CBOR -> {
           response.send(
-            St1AdminProtocolMapperCBOR.get()
+            St1DataProtocolMapperCBOR.get()
               .writeValueAsBytes(
-                new St1AdminError(
+                new St1DeviceError(
                   "error-" + code,
                   exception.getMessage()
                 )

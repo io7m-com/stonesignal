@@ -110,6 +110,14 @@ public class StDatabaseTest
         Optional.empty()
       );
 
+    final var dataAPI =
+      new StConfiguration.DataAPI(
+        "localhost",
+        10002,
+        "FB241A9C3009F0A73C09114780275EEF9B825F23317E9C3F783FECA3A0698D52",
+        Optional.empty()
+      );
+
     this.database =
       this.databases.open(
         new StDatabaseConfiguration(
@@ -117,7 +125,8 @@ public class StDatabaseTest
             dbConfig,
             Optional.empty(),
             deviceAPI,
-            adminAPI
+            adminAPI,
+            dataAPI
           ),
           DDatabaseTelemetryNoOp.get()
         ),

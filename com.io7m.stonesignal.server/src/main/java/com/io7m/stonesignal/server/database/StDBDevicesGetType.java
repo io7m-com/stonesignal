@@ -14,11 +14,21 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
+package com.io7m.stonesignal.server.database;
+
+import com.io7m.darco.api.DDatabaseQueryType;
+import com.io7m.darco.api.DDatabaseUnit;
+
+import java.util.SortedMap;
+import java.util.UUID;
+
 /**
- * Position recorder (Server [Device API])
+ * devices
  */
 
-@Version("1.0.0")
-package com.io7m.stonesignal.server.device_api_v1;
+public interface StDBDevicesGetType
+  extends DDatabaseQueryType<DDatabaseUnit, SortedMap<UUID, String>>
+{
 
-import org.osgi.annotation.versioning.Version;
+}

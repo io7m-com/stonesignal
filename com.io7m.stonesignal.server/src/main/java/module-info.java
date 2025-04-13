@@ -22,6 +22,7 @@ import com.io7m.stonesignal.server.database.StDBDeviceGetByKey;
 import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdatePut;
 import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdateSearch;
 import com.io7m.stonesignal.server.database.StDBDevicePut;
+import com.io7m.stonesignal.server.database.StDBDevicesGet;
 import com.io7m.stonesignal.server.database.StDatabaseQueryProviderType;
 import com.io7m.stonesignal.server.telemetry.StTelemetryServiceFactoryType;
 
@@ -33,6 +34,10 @@ module com.io7m.stonesignal.server
 {
   requires static org.osgi.annotation.versioning;
   requires static org.osgi.annotation.bundle;
+
+  requires com.io7m.stonesignal.protocol.admin;
+  requires com.io7m.stonesignal.protocol.device;
+  requires com.io7m.stonesignal.protocol.data;
 
   requires com.fasterxml.jackson.annotation;
   requires com.fasterxml.jackson.databind;
@@ -48,8 +53,6 @@ module com.io7m.stonesignal.server
   requires com.io7m.quarrel.ext.logback;
   requires com.io7m.repetoir.core;
   requires com.io7m.seltzer.api;
-  requires com.io7m.stonesignal.protocol.admin;
-  requires com.io7m.stonesignal.protocol.device;
   requires com.io7m.ventrad.core;
   requires io.helidon.common.tls;
   requires io.helidon.webserver;
@@ -78,6 +81,9 @@ module com.io7m.stonesignal.server
     to com.io7m.stonesignal.tests;
   exports com.io7m.stonesignal.server.device_api_v1
     to com.io7m.stonesignal.tests;
+  exports com.io7m.stonesignal.server.data_api_v1
+    to com.io7m.stonesignal.tests;
+  exports com.io7m.stonesignal.server.internal;
 
   provides StDatabaseQueryProviderType with
     StDBAuditSearch,
@@ -85,7 +91,8 @@ module com.io7m.stonesignal.server
     StDBDeviceGetByKey,
     StDBDeviceLocationUpdatePut,
     StDBDeviceLocationUpdateSearch,
-    StDBDevicePut;
+    StDBDevicePut,
+    StDBDevicesGet;
 
   provides StServerFactoryType with
     StServers;

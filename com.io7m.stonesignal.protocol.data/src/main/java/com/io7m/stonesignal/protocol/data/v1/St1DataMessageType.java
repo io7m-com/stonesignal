@@ -14,11 +14,23 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+package com.io7m.stonesignal.protocol.data.v1;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
- * Position recorder (Server [Device API])
+ * The type of device protocol messages.
  */
 
-@Version("1.0.0")
-package com.io7m.stonesignal.server.device_api_v1;
+@JsonSerialize
+@JsonDeserialize
+public sealed interface St1DataMessageType
+  permits St1DataDeviceGetByID,
+  St1DataDeviceGetResponse,
+  St1DataDevicesGet,
+  St1DataDevicesGetResponse,
+  St1DataError
+{
 
-import org.osgi.annotation.versioning.Version;
+}

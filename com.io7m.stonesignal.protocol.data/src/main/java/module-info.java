@@ -15,10 +15,15 @@
  */
 
 /**
- * Position recorder (Server [Device API])
+ * The data protocol.
  */
 
-@Version("1.0.0")
-package com.io7m.stonesignal.server.device_api_v1;
+module com.io7m.stonesignal.protocol.data
+{
+  requires static org.osgi.annotation.bundle;
+  requires static org.osgi.annotation.versioning;
 
-import org.osgi.annotation.versioning.Version;
+  requires com.fasterxml.jackson.databind;
+
+  exports com.io7m.stonesignal.protocol.data.v1;
+}

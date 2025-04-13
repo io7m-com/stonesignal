@@ -15,7 +15,7 @@
  */
 
 /**
- * Position recorder (Server [Public API])
+ * Position recorder (Server [Admin API])
  */
 
 @Version("1.0.0")

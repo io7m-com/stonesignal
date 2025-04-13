@@ -15,10 +15,10 @@
  */
 
 /**
- * Position recorder (Server [Device API])
+ * Position recorder (Server [Internals])
  */
 
 @Version("1.0.0")
-package com.io7m.stonesignal.server.device_api_v1;
+package com.io7m.stonesignal.server.internal;
 
 import org.osgi.annotation.versioning.Version;

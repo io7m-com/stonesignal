@@ -49,7 +49,11 @@ public record StConfiguration(
 
   @JsonProperty(value = "AdminAPI", required = true)
   @JsonPropertyDescription("The admin API configuration.")
-  AdminAPI adminAPI)
+  AdminAPI adminAPI,
+
+  @JsonProperty(value = "DataAPI", required = true)
+  @JsonPropertyDescription("The data API configuration.")
+  DataAPI dataAPI)
 {
   public StConfiguration
   {
@@ -57,6 +61,7 @@ public record StConfiguration(
     Objects.requireNonNull(openTelemetry, "openTelemetry");
     Objects.requireNonNull(deviceAPI, "deviceAPI");
     Objects.requireNonNull(adminAPI, "adminAPI");
+    Objects.requireNonNull(dataAPI, "dataAPI");
   }
 
   @JsonDeserialize
@@ -213,6 +218,33 @@ public record StConfiguration(
     Optional<TLS> tls)
   {
     public AdminAPI
+    {
+      Objects.requireNonNull(host, "host");
+      Objects.requireNonNull(tls, "tls");
+      Objects.requireNonNull(apiKey, "apiKey");
+    }
+  }
+
+  @JsonDeserialize
+  @JsonSerialize
+  public record DataAPI(
+    @JsonProperty(value = "Host", required = true)
+    @JsonPropertyDescription("The host address to which to bind.")
+    String host,
+
+    @JsonProperty(value = "Port", required = true)
+    @JsonPropertyDescription("The host port to which to bind.")
+    int port,
+
+    @JsonProperty(value = "APIKey", required = true)
+    @JsonPropertyDescription("The API key.")
+    String apiKey,
+
+    @JsonProperty(value = "TLS")
+    @JsonPropertyDescription("The TLS configuration.")
+    Optional<TLS> tls)
+  {
+    public DataAPI
     {
       Objects.requireNonNull(host, "host");
       Objects.requireNonNull(tls, "tls");

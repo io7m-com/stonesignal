@@ -14,11 +14,41 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
+package com.io7m.stonesignal.protocol.data.v1;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.util.Objects;
+
 /**
- * Position recorder (Server [Device API])
+ * An error message.
+ *
+ * @param errorCode The error code
+ * @param message   The error message
  */
 
-@Version("1.0.0")
-package com.io7m.stonesignal.server.device_api_v1;
+@JsonSerialize
+@JsonDeserialize
+public record St1DataError(
+  @JsonProperty("ErrorCode")
+  String errorCode,
+  @JsonProperty("Message")
+  String message)
+  implements St1DataMessageType
+{
+  /**
+   * An error message.
+   *
+   * @param errorCode The error code
+   * @param message   The error message
+   */
 
-import org.osgi.annotation.versioning.Version;
+  public St1DataError
+  {
+    Objects.requireNonNull(errorCode, "errorCode");
+    Objects.requireNonNull(message, "message");
+  }
+}

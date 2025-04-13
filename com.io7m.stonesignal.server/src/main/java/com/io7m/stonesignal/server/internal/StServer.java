@@ -14,17 +14,20 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.stonesignal.server;
+package com.io7m.stonesignal.server.internal;
 
 import com.io7m.darco.api.DDatabaseException;
 import com.io7m.jmulticlose.core.CloseableCollection;
 import com.io7m.jmulticlose.core.CloseableCollectionType;
 import com.io7m.repetoir.core.RPServiceDirectory;
 import com.io7m.repetoir.core.RPServiceDirectoryType;
+import com.io7m.stonesignal.server.StConfiguration;
+import com.io7m.stonesignal.server.StServerType;
 import com.io7m.stonesignal.server.admin_api_v1.StAdminAPI;
 import com.io7m.stonesignal.server.clock.StServerClock;
 import com.io7m.stonesignal.server.configuration.StConfigurationService;
 import com.io7m.stonesignal.server.configuration.StConfigurationServiceType;
+import com.io7m.stonesignal.server.data_api_v1.StDataAPI;
 import com.io7m.stonesignal.server.database.StDatabaseConfiguration;
 import com.io7m.stonesignal.server.database.StDatabaseFactory;
 import com.io7m.stonesignal.server.database.StDatabaseType;
@@ -122,6 +125,8 @@ public final class StServer implements StServerType
           this.resources.add(publicAPI::stop);
           final var adminAPI = StAdminAPI.create(services);
           this.resources.add(adminAPI::stop);
+          final var dataAPI = StDataAPI.create(services);
+          this.resources.add(dataAPI::stop);
         } catch (final Exception e) {
           startupSpan.recordException(e);
 

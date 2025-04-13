@@ -16,6 +16,8 @@
 
 package com.io7m.stonesignal.server;
 
+import com.io7m.stonesignal.server.internal.StServer;
+
 import java.time.Clock;
 import java.util.Objects;
 

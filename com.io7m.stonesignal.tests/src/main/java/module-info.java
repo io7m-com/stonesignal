@@ -17,6 +17,11 @@
 
 open module com.io7m.stonesignal.tests
 {
+  requires com.io7m.stonesignal.protocol.admin;
+  requires com.io7m.stonesignal.protocol.data;
+  requires com.io7m.stonesignal.protocol.device;
+  requires com.io7m.stonesignal.server;
+
   requires com.fasterxml.jackson.core;
   requires com.fasterxml.jackson.databind;
   requires com.fasterxml.jackson.dataformat.cbor;
@@ -25,9 +30,6 @@ open module com.io7m.stonesignal.tests
   requires com.io7m.ervilla.postgres;
   requires com.io7m.ervilla.test_extension;
   requires com.io7m.percentpass.extension;
-  requires com.io7m.stonesignal.protocol.admin;
-  requires com.io7m.stonesignal.protocol.device;
-  requires com.io7m.stonesignal.server;
   requires com.io7m.zelador.test_extension;
   requires java.net.http;
   requires org.junit.jupiter.api;

@@ -24,6 +24,7 @@
     <module>com.io7m.stonesignal.distribution</module>
     <module>com.io7m.stonesignal.oci</module>
     <module>com.io7m.stonesignal.protocol.admin</module>
+    <module>com.io7m.stonesignal.protocol.data</module>
     <module>com.io7m.stonesignal.protocol.device</module>
     <module>com.io7m.stonesignal.server</module>
     <module>com.io7m.stonesignal.tests</module>

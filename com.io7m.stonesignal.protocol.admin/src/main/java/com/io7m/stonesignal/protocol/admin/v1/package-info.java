@@ -15,7 +15,7 @@
  */
 
 /**
- * The device protocol (v1).
+ * The admin protocol (v1).
  */
 
 @Export

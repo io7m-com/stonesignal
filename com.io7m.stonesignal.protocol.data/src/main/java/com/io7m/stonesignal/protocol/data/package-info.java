@@ -15,10 +15,12 @@
  */
 
 /**
- * Position recorder (Server [Device API])
+ * The data protocol.
  */
 
+@Export
 @Version("1.0.0")
-package com.io7m.stonesignal.server.device_api_v1;
+package com.io7m.stonesignal.protocol.data;
 
+import org.osgi.annotation.bundle.Export;
 import org.osgi.annotation.versioning.Version;
