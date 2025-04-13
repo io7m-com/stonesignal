@@ -18,9 +18,11 @@
 package com.io7m.stonesignal.server.admin_api_v1;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.cbor.databind.CBORMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.io7m.dixmont.core.DmJsonRestrictedDeserializers;
 import com.io7m.stonesignal.protocol.admin.v1.St1AdminProtocol;
 
@@ -63,6 +65,8 @@ public final class St1AdminProtocolMapperCBOR
     return CBORMapper.builder()
       .addModule(simpleModule)
       .addModule(new Jdk8Module())
+      .addModule(new JavaTimeModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION)
       .build();
   }

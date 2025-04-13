@@ -14,25 +14,22 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.stonesignal.protocol.data.v1;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+package com.io7m.stonesignal.server.database;
+
+import com.io7m.darco.api.DDatabaseQueryType;
+import com.io7m.darco.api.DDatabaseUnit;
+import com.io7m.stonesignal.server.devices.StDeviceLocation;
+
+import java.util.SortedMap;
+import java.util.UUID;
 
 /**
- * The type of device protocol messages.
+ * device-locations
  */
 
-@JsonSerialize
-@JsonDeserialize
-public sealed interface St1DataMessageType
-  permits St1DataDeviceGetByID,
-  St1DataDeviceGetResponse,
-  St1DataDeviceLocationsGet,
-  St1DataDeviceLocationsGetResponse,
-  St1DataDevicesGet,
-  St1DataDevicesGetResponse,
-  St1DataError
+public interface StDBDeviceLocationsGetType
+  extends DDatabaseQueryType<DDatabaseUnit, SortedMap<UUID, StDeviceLocation>>
 {
 
 }

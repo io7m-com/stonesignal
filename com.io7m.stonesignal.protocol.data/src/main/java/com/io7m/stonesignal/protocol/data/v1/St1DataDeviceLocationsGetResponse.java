@@ -15,41 +15,32 @@
  */
 
 
-package com.io7m.stonesignal.server.devices;
+package com.io7m.stonesignal.protocol.data.v1;
 
-import java.time.OffsetDateTime;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A device location update.
- *
- * @param id     The location update ID
- * @param device The location device
- * @param time   The location update time
- * @param data   The location update data
+ * The response to getting device locations.
  */
 
-public record StDeviceLocationUpdate(
-  long id,
-  UUID device,
-  OffsetDateTime time,
-  Map<String, String> data)
-{
-  /**
-   * A device location update.
-   *
-   * @param id     The location update ID
-   * @param device The location device
-   * @param time   The location update time
-   * @param data   The location update data
-   */
+// CHECKSTYLE:OFF
 
-  public StDeviceLocationUpdate
+@JsonSerialize
+@JsonDeserialize
+public record St1DataDeviceLocationsGetResponse(
+  @JsonProperty("Locations")
+  @JsonPropertyDescription("The device locations by ID.")
+  Map<UUID, St1DataLocation> locations)
+  implements St1DataMessageType
+{
+  public St1DataDeviceLocationsGetResponse
   {
-    Objects.requireNonNull(device, "device");
-    Objects.requireNonNull(time, "time");
-    data = Map.copyOf(data);
+    locations = Map.copyOf(locations);
   }
 }

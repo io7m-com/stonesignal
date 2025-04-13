@@ -18,8 +18,10 @@
 package com.io7m.stonesignal.server.device_api_v1;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.io7m.dixmont.core.DmJsonRestrictedDeserializers;
 import com.io7m.stonesignal.protocol.device.v1.St1DeviceProtocol;
 
@@ -63,6 +65,8 @@ public final class St1DeviceProtocolMapperJSON
 
     return JsonMapper.builder()
       .addModule(simpleModule)
+      .addModule(new JavaTimeModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION)
       .build();
   }

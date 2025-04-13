@@ -19,14 +19,14 @@ package com.io7m.stonesignal.server.database;
 
 import com.io7m.darco.api.DDatabaseQueryType;
 import com.io7m.darco.api.DDatabaseUnit;
-import com.io7m.stonesignal.server.devices.StDeviceLocationUpdate;
+import com.io7m.stonesignal.server.devices.StDeviceLocation;
 
 /**
  * device-location-update-put
  */
 
 public interface StDBDeviceLocationUpdatePutType
-  extends DDatabaseQueryType<StDeviceLocationUpdate, DDatabaseUnit>
+  extends DDatabaseQueryType<StDeviceLocation, DDatabaseUnit>
 {
 
 }

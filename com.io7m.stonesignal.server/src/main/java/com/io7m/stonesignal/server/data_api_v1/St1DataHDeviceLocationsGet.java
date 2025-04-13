@@ -15,93 +15,95 @@
  */
 
 
-package com.io7m.stonesignal.server.device_api_v1;
+package com.io7m.stonesignal.server.data_api_v1;
 
 import com.io7m.darco.api.DDatabaseException;
+import com.io7m.darco.api.DDatabaseUnit;
 import com.io7m.repetoir.core.RPServiceDirectoryType;
-import com.io7m.stonesignal.protocol.device.v1.St1DeviceLocationUpdate;
-import com.io7m.stonesignal.protocol.device.v1.St1DeviceOK;
-import com.io7m.stonesignal.server.clock.StServerClock;
-import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdatePutType;
+import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceLocationsGetResponse;
+import com.io7m.stonesignal.protocol.data.v1.St1DataDevicesGet;
+import com.io7m.stonesignal.protocol.data.v1.St1DataLocation;
+import com.io7m.stonesignal.server.database.StDBDeviceLocationsGetType;
 import com.io7m.stonesignal.server.database.StDatabaseType;
 import com.io7m.stonesignal.server.devices.StDeviceLocation;
 import io.helidon.http.Status;
 import io.helidon.webserver.http.ServerRequest;
 import io.helidon.webserver.http.ServerResponse;
 
-import java.io.IOException;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
- * device-location-put
+ * device-locations
  */
 
-public final class St1DeviceLocationPut
+public final class St1DataHDeviceLocationsGet
   extends St1BearerHandler
 {
   private final StDatabaseType database;
-  private final StServerClock clock;
 
-  /**
-   * device-location-put
-   *
-   * @param inServices The services
-   */
-
-  public St1DeviceLocationPut(
+  St1DataHDeviceLocationsGet(
     final RPServiceDirectoryType inServices)
   {
     super(inServices);
 
     this.database =
       inServices.requireService(StDatabaseType.class);
-    this.clock =
-      inServices.requireService(StServerClock.class);
   }
 
   @Override
   protected void handleAuthenticated(
     final ServerRequest request,
     final ServerResponse response)
-    throws IOException, DDatabaseException
+    throws DDatabaseException
   {
-    final St1DeviceLocationUpdate data;
-    try {
-      data = this.read(request, St1DeviceLocationUpdate.class);
-    } catch (final IOException e) {
-      response.status(Status.BAD_REQUEST_400);
-      throw e;
-    }
+    this.read(request, St1DataDevicesGet.class);
 
+    final Map<UUID, StDeviceLocation> locations;
     try (final var t = this.database.openTransaction()) {
-      final var p = t.query(StDBDeviceLocationUpdatePutType.class);
-      p.execute(new StDeviceLocation(
-        0L,
-        this.device().id(),
-        this.clock.nowPrecise(),
-        data.accuracy(),
-        data.altitude(),
-        data.bearing(),
-        data.bearingAccuracy(),
-        data.latitude(),
-        data.longitude(),
-        data.mslAltitude(),
-        data.mslAltitudeAccuracy(),
-        data.speed(),
-        data.speedAccuracy()
-      ));
-      t.commit();
+      final var p = t.query(StDBDeviceLocationsGetType.class);
+      locations = p.execute(DDatabaseUnit.UNIT);
     } catch (final DDatabaseException e) {
       response.status(Status.INTERNAL_SERVER_ERROR_500);
       throw e;
     }
 
+    final var data = transformLocations(locations);
     response.status(200);
-    this.send(response, new St1DeviceOK());
+    this.send(response, new St1DataDeviceLocationsGetResponse(data));
+  }
+
+  private static Map<UUID, St1DataLocation> transformLocations(
+    final Map<UUID, StDeviceLocation> locations)
+  {
+    return locations.entrySet()
+      .stream()
+      .map(e -> Map.entry(e.getKey(), transformLocation(e.getValue())))
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+  }
+
+  private static St1DataLocation transformLocation(
+    final StDeviceLocation value)
+  {
+    return new St1DataLocation(
+      value.time(),
+      value.accuracy(),
+      value.altitude(),
+      value.bearing(),
+      value.bearingAccuracy(),
+      value.latitude(),
+      value.longitude(),
+      value.mslAltitude(),
+      value.mslAltitudeAccuracy(),
+      value.speed(),
+      value.speedAccuracy()
+    );
   }
 
   @Override
   protected String name()
   {
-    return "DeviceLocationPut";
+    return "DataDevices";
   }
 }

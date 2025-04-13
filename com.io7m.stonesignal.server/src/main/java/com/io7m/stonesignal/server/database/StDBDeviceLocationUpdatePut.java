@@ -18,7 +18,7 @@ package com.io7m.stonesignal.server.database;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.io7m.darco.api.DDatabaseUnit;
-import com.io7m.stonesignal.server.devices.StDeviceLocationUpdate;
+import com.io7m.stonesignal.server.devices.StDeviceLocation;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
 
@@ -31,7 +31,7 @@ import static com.io7m.stonesignal.server.database.internal.Tables.DEVICE_LOCATI
  */
 
 public final class StDBDeviceLocationUpdatePut
-  extends StDatabaseQueryAbstract<StDeviceLocationUpdate, DDatabaseUnit>
+  extends StDatabaseQueryAbstract<StDeviceLocation, DDatabaseUnit>
   implements StDBDeviceLocationUpdatePutType
 {
   StDBDeviceLocationUpdatePut(final StDatabaseTransactionType t)
@@ -44,7 +44,7 @@ public final class StDBDeviceLocationUpdatePut
    */
 
   public static StDatabaseQueryProviderType<
-    StDeviceLocationUpdate, DDatabaseUnit, StDBDeviceLocationUpdatePutType>
+    StDeviceLocation, DDatabaseUnit, StDBDeviceLocationUpdatePutType>
   provider()
   {
     return StDatabaseQueryProvider.provide(
@@ -57,7 +57,7 @@ public final class StDBDeviceLocationUpdatePut
   protected DDatabaseUnit onExecuteWithContext(
     final StDatabaseTransactionType transaction,
     final DSLContext context,
-    final StDeviceLocationUpdate update)
+    final StDeviceLocation update)
     throws Exception
   {
     this.record("DeviceID", update.device());
@@ -65,7 +65,7 @@ public final class StDBDeviceLocationUpdatePut
     context.insertInto(DEVICE_LOCATION_UPDATES)
       .set(DEVICE_LOCATION_UPDATES.DLU_TIME, update.time())
       .set(DEVICE_LOCATION_UPDATES.DLU_DEVICE, update.device())
-      .set(DEVICE_LOCATION_UPDATES.DLU_DATA, this.metadataJson(update.data()))
+      .set(DEVICE_LOCATION_UPDATES.DLU_DATA, this.metadataJson(update.toMap()))
       .execute();
 
     return DDatabaseUnit.UNIT;

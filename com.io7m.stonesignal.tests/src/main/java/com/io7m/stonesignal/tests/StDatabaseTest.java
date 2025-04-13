@@ -19,6 +19,7 @@ package com.io7m.stonesignal.tests;
 
 import com.io7m.darco.api.DDatabaseException;
 import com.io7m.darco.api.DDatabaseTelemetryNoOp;
+import com.io7m.darco.api.DDatabaseUnit;
 import com.io7m.ervilla.api.EContainerSupervisorType;
 import com.io7m.ervilla.test_extension.ErvillaCloseAfterSuite;
 import com.io7m.ervilla.test_extension.ErvillaConfiguration;
@@ -31,13 +32,14 @@ import com.io7m.stonesignal.server.database.StDBDeviceGetByKeyType;
 import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdatePutType;
 import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdateSearchParameters;
 import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdateSearchType;
+import com.io7m.stonesignal.server.database.StDBDeviceLocationsGetType;
 import com.io7m.stonesignal.server.database.StDBDevicePutType;
 import com.io7m.stonesignal.server.database.StDatabaseConfiguration;
 import com.io7m.stonesignal.server.database.StDatabaseFactory;
 import com.io7m.stonesignal.server.database.StDatabaseType;
 import com.io7m.stonesignal.server.devices.StDevice;
 import com.io7m.stonesignal.server.devices.StDeviceKey;
-import com.io7m.stonesignal.server.devices.StDeviceLocationUpdate;
+import com.io7m.stonesignal.server.devices.StDeviceLocation;
 import com.io7m.zelador.test_extension.ZeladorExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,6 +48,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -264,11 +268,11 @@ public class StDatabaseTest
         }
 
         q.execute(
-          new StDeviceLocationUpdate(
+          StDeviceLocation.fromMap(
             0L,
             device.id(),
             time,
-            Map.of("x", "x")
+            Map.of("Speed", "1.0")
           )
         );
       }
@@ -341,6 +345,74 @@ public class StDatabaseTest
           ));
         assertEquals(1, r.size());
         timeSearch = r.getLast().time();
+      }
+    }
+  }
+
+  @Test
+  public void testDeviceLocationsGet()
+    throws DDatabaseException
+  {
+    final var devices = new ArrayList<StDevice>();
+    for (int index = 0; index < 5; ++index) {
+      devices.add(
+        new StDevice(
+          UUID.randomUUID(),
+          StDeviceKey.random(),
+          "Device " + index,
+          Map.ofEntries(
+            Map.entry("x", "y"),
+            Map.entry("a", "b")
+          )
+        )
+      );
+    }
+
+    final var highestTime =
+      new HashMap<UUID, OffsetDateTime>();
+    final var highestData =
+      new HashMap<UUID, String>();
+
+    var time =
+      OffsetDateTime.now()
+        .withNano(0);
+
+    try (final var t = this.database.openTransaction()) {
+      final var p = t.query(StDBDevicePutType.class);
+      final var q = t.query(StDBDeviceLocationUpdatePutType.class);
+      final var r = t.query(StDBDeviceLocationsGetType.class);
+
+      for (final var device : devices) {
+        p.execute(device);
+
+        for (int index = 0; index < 100; ++index) {
+          final var data = Integer.toString(100 - index);
+          q.execute(StDeviceLocation.fromMap(
+            0L,
+            device.id(),
+            time,
+            Map.of("Speed", data)
+          ));
+          highestData.put(device.id(), data);
+          highestTime.put(device.id(), time);
+          time = time.plusSeconds(1L);
+        }
+      }
+
+      t.commit();
+
+      final var l = r.execute(DDatabaseUnit.UNIT);
+      assertEquals(devices.size(), l.size());
+
+      for (final var device : devices) {
+        assertEquals(
+          highestTime.get(device.id()),
+          l.get(device.id()).time()
+        );
+        assertEquals(
+          Double.parseDouble(highestData.get(device.id())),
+          l.get(device.id()).speed()
+        );
       }
     }
   }

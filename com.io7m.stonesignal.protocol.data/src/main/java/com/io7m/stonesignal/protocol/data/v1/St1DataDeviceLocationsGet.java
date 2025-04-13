@@ -14,25 +14,22 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
 package com.io7m.stonesignal.protocol.data.v1;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
- * The type of device protocol messages.
+ * Get the most recent known locations of all devices.
  */
+
+// CHECKSTYLE:OFF
 
 @JsonSerialize
 @JsonDeserialize
-public sealed interface St1DataMessageType
-  permits St1DataDeviceGetByID,
-  St1DataDeviceGetResponse,
-  St1DataDeviceLocationsGet,
-  St1DataDeviceLocationsGetResponse,
-  St1DataDevicesGet,
-  St1DataDevicesGetResponse,
-  St1DataError
+public record St1DataDeviceLocationsGet()
+  implements St1DataMessageType
 {
 
 }

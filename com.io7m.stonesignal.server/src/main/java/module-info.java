@@ -21,6 +21,7 @@ import com.io7m.stonesignal.server.database.StDBDeviceGetByID;
 import com.io7m.stonesignal.server.database.StDBDeviceGetByKey;
 import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdatePut;
 import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdateSearch;
+import com.io7m.stonesignal.server.database.StDBDeviceLocationsGet;
 import com.io7m.stonesignal.server.database.StDBDevicePut;
 import com.io7m.stonesignal.server.database.StDBDevicesGet;
 import com.io7m.stonesignal.server.database.StDatabaseQueryProviderType;
@@ -43,6 +44,7 @@ module com.io7m.stonesignal.server
   requires com.fasterxml.jackson.databind;
   requires com.fasterxml.jackson.dataformat.cbor;
   requires com.fasterxml.jackson.datatype.jdk8;
+  requires com.fasterxml.jackson.datatype.jsr310;
   requires com.io7m.canonmill.core;
   requires com.io7m.darco.api;
   requires com.io7m.darco.postgres;
@@ -91,6 +93,7 @@ module com.io7m.stonesignal.server
     StDBDeviceGetByKey,
     StDBDeviceLocationUpdatePut,
     StDBDeviceLocationUpdateSearch,
+    StDBDeviceLocationsGet,
     StDBDevicePut,
     StDBDevicesGet;
 

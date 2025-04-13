@@ -18,7 +18,7 @@
 package com.io7m.stonesignal.server.database;
 
 import com.io7m.darco.api.DDatabaseQueryType;
-import com.io7m.stonesignal.server.devices.StDeviceLocationUpdate;
+import com.io7m.stonesignal.server.devices.StDeviceLocation;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ import java.util.List;
 public interface StDBDeviceLocationUpdateSearchType
   extends DDatabaseQueryType<
   StDBDeviceLocationUpdateSearchParameters,
-  List<StDeviceLocationUpdate>>
+  List<StDeviceLocation>>
 {
 
 }

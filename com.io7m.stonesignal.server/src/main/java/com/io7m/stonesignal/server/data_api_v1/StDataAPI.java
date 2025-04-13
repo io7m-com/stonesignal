@@ -105,6 +105,15 @@ public final class StDataAPI
     );
 
     routingBuilder.get(
+      "/1/0/device-locations",
+      new St1DataHDeviceLocationsGet(services)
+    );
+    routingBuilder.post(
+      "/1/0/device-locations",
+      new St1DataHDeviceLocationsGet(services)
+    );
+
+    routingBuilder.get(
       "/",
       new StVersions(services, 200)
     );

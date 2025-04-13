@@ -16,7 +16,7 @@
 
 package com.io7m.stonesignal.server.database;
 
-import com.io7m.stonesignal.server.devices.StDeviceLocationUpdate;
+import com.io7m.stonesignal.server.devices.StDeviceLocation;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 
@@ -33,7 +33,7 @@ import static com.io7m.stonesignal.server.database.internal.Tables.DEVICE_LOCATI
 public final class StDBDeviceLocationUpdateSearch
   extends StDatabaseQueryAbstract<
   StDBDeviceLocationUpdateSearchParameters,
-  List<StDeviceLocationUpdate>>
+  List<StDeviceLocation>>
   implements StDBDeviceLocationUpdateSearchType
 {
   StDBDeviceLocationUpdateSearch(final StDatabaseTransactionType t)
@@ -47,7 +47,7 @@ public final class StDBDeviceLocationUpdateSearch
 
   public static StDatabaseQueryProviderType<
     StDBDeviceLocationUpdateSearchParameters,
-    List<StDeviceLocationUpdate>,
+    List<StDeviceLocation>,
     StDBDeviceLocationUpdateSearchType>
   provider()
   {
@@ -58,7 +58,7 @@ public final class StDBDeviceLocationUpdateSearch
   }
 
   @Override
-  protected List<StDeviceLocationUpdate> onExecuteWithContext(
+  protected List<StDeviceLocation> onExecuteWithContext(
     final StDatabaseTransactionType transaction,
     final DSLContext context,
     final StDBDeviceLocationUpdateSearchParameters search)
@@ -84,14 +84,14 @@ public final class StDBDeviceLocationUpdateSearch
         .fetch();
 
     final var results =
-      new ArrayList<StDeviceLocationUpdate>(r.size());
+      new ArrayList<StDeviceLocation>(r.size());
 
     final var mapper =
       this.objectMapper();
 
     for (final var rec : r) {
       results.add(
-        new StDeviceLocationUpdate(
+        StDeviceLocation.fromMap(
           rec.get(DEVICE_LOCATION_UPDATES.DLU_ID),
           rec.get(DEVICE_LOCATION_UPDATES.DLU_DEVICE),
           rec.get(DEVICE_LOCATION_UPDATES.DLU_TIME),

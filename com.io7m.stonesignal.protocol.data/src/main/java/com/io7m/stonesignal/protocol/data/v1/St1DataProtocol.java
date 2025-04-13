@@ -17,6 +17,7 @@
 
 package com.io7m.stonesignal.protocol.data.v1;
 
+import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -42,7 +43,8 @@ public final class St1DataProtocol
     return Stream.concat(
       Stream.of(
         "java.util.Map<java.lang.String,java.lang.String>",
-        "java.util.Map<java.util.UUID,java.lang.String>"
+        "java.util.Map<java.util.UUID,java.lang.String>",
+        "java.util.Map<java.util.UUID,com.io7m.stonesignal.protocol.data.v1.St1DataLocation>"
       ),
       classes()
         .stream()
@@ -60,12 +62,17 @@ public final class St1DataProtocol
       St1DataDevice.class,
       St1DataDeviceGetByID.class,
       St1DataDeviceGetResponse.class,
+      St1DataDeviceLocationsGet.class,
+      St1DataDeviceLocationsGetResponse.class,
       St1DataDevicesGet.class,
       St1DataDevicesGetResponse.class,
       St1DataError.class,
+      St1DataLocation.class,
       St1DataMessageType.class,
+      OffsetDateTime.class,
       String.class,
       UUID.class,
+      double.class,
       int.class
     );
   }
