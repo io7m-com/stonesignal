@@ -14,27 +14,43 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
 package com.io7m.stonesignal.protocol.data.v1;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.time.OffsetDateTime;
+import java.util.Objects;
+import java.util.UUID;
+
 /**
- * The type of device protocol messages.
+ * Get the location history of a device.
  */
+
+// CHECKSTYLE:OFF
 
 @JsonSerialize
 @JsonDeserialize
-public sealed interface St1DataMessageType
-  permits St1DataDeviceGetByID,
-  St1DataDeviceGetResponse,
-  St1DataDeviceLocationHistoryGet,
-  St1DataDeviceLocationHistoryGetResponse,
-  St1DataDeviceLocationsGet,
-  St1DataDeviceLocationsGetResponse,
-  St1DataDevicesGet,
-  St1DataDevicesGetResponse,
-  St1DataError
-{
+public record St1DataDeviceLocationHistoryGet(
+  @JsonProperty("DeviceID")
+  @JsonPropertyDescription("The device ID.")
+  UUID deviceId,
 
+  @JsonProperty("TimeStart")
+  @JsonPropertyDescription("The start time.")
+  OffsetDateTime timeStart,
+
+  @JsonProperty("Count")
+  @JsonPropertyDescription("The maximum number of events to return.")
+  int count)
+  implements St1DataMessageType
+{
+  public St1DataDeviceLocationHistoryGet
+  {
+    Objects.requireNonNull(deviceId, "deviceId");
+    Objects.requireNonNull(timeStart, "timeStart");
+  }
 }

@@ -114,6 +114,15 @@ public final class StDataAPI
     );
 
     routingBuilder.get(
+      "/1/0/device-location-history",
+      new St1DataHDeviceLocationHistory(services)
+    );
+    routingBuilder.post(
+      "/1/0/device-location-history",
+      new St1DataHDeviceLocationHistory(services)
+    );
+
+    routingBuilder.get(
       "/",
       new StVersions(services, 200)
     );

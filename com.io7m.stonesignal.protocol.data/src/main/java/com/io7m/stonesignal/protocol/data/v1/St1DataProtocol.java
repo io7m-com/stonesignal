@@ -44,7 +44,8 @@ public final class St1DataProtocol
       Stream.of(
         "java.util.Map<java.lang.String,java.lang.String>",
         "java.util.Map<java.util.UUID,java.lang.String>",
-        "java.util.Map<java.util.UUID,com.io7m.stonesignal.protocol.data.v1.St1DataLocation>"
+        "java.util.Map<java.util.UUID,com.io7m.stonesignal.protocol.data.v1.St1DataLocation>",
+        "java.util.List<com.io7m.stonesignal.protocol.data.v1.St1DataLocation>"
       ),
       classes()
         .stream()
@@ -59,9 +60,12 @@ public final class St1DataProtocol
   private static Set<Class<?>> classes()
   {
     return Set.of(
+      OffsetDateTime.class,
       St1DataDevice.class,
       St1DataDeviceGetByID.class,
       St1DataDeviceGetResponse.class,
+      St1DataDeviceLocationHistoryGet.class,
+      St1DataDeviceLocationHistoryGetResponse.class,
       St1DataDeviceLocationsGet.class,
       St1DataDeviceLocationsGetResponse.class,
       St1DataDevicesGet.class,
@@ -69,9 +73,9 @@ public final class St1DataProtocol
       St1DataError.class,
       St1DataLocation.class,
       St1DataMessageType.class,
-      OffsetDateTime.class,
       String.class,
       UUID.class,
+      long.class,
       double.class,
       int.class
     );

@@ -18,32 +18,30 @@
 package com.io7m.stonesignal.server.data_api_v1;
 
 import com.io7m.darco.api.DDatabaseException;
-import com.io7m.darco.api.DDatabaseUnit;
 import com.io7m.repetoir.core.RPServiceDirectoryType;
-import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceLocationsGetResponse;
-import com.io7m.stonesignal.protocol.data.v1.St1DataDevicesGet;
+import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceLocationHistoryGet;
+import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceLocationHistoryGetResponse;
 import com.io7m.stonesignal.protocol.data.v1.St1DataLocation;
-import com.io7m.stonesignal.server.database.StDBDeviceLocationsGetType;
+import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdateSearchParameters;
+import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdateSearchType;
 import com.io7m.stonesignal.server.database.StDatabaseType;
 import com.io7m.stonesignal.server.devices.StDeviceLocation;
 import io.helidon.http.Status;
 import io.helidon.webserver.http.ServerRequest;
 import io.helidon.webserver.http.ServerResponse;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.List;
 
 /**
- * device-locations
+ * device-location-history
  */
 
-public final class St1DataHDeviceLocationsGet
+public final class St1DataHDeviceLocationHistory
   extends St1BearerHandler
 {
   private final StDatabaseType database;
 
-  St1DataHDeviceLocationsGet(
+  St1DataHDeviceLocationHistory(
     final RPServiceDirectoryType inServices)
   {
     super(inServices);
@@ -58,12 +56,19 @@ public final class St1DataHDeviceLocationsGet
     final ServerResponse response)
     throws DDatabaseException
   {
-    this.read(request, St1DataDevicesGet.class);
+    final var command =
+      this.read(request, St1DataDeviceLocationHistoryGet.class);
 
-    final Map<UUID, StDeviceLocation> locations;
+    final List<StDeviceLocation> locations;
     try (final var t = this.database.openTransaction()) {
-      final var p = t.query(StDBDeviceLocationsGetType.class);
-      locations = p.execute(DDatabaseUnit.UNIT);
+      final var p = t.query(StDBDeviceLocationUpdateSearchType.class);
+      locations = p.execute(
+        new StDBDeviceLocationUpdateSearchParameters(
+          command.deviceId(),
+          command.timeStart(),
+          command.count()
+        )
+      );
     } catch (final DDatabaseException e) {
       response.status(Status.INTERNAL_SERVER_ERROR_500);
       throw e;
@@ -71,16 +76,15 @@ public final class St1DataHDeviceLocationsGet
 
     final var data = transformLocations(locations);
     response.status(200);
-    this.send(response, new St1DataDeviceLocationsGetResponse(data));
+    this.send(response, new St1DataDeviceLocationHistoryGetResponse(data));
   }
 
-  private static Map<UUID, St1DataLocation> transformLocations(
-    final Map<UUID, StDeviceLocation> locations)
+  private static List<St1DataLocation> transformLocations(
+    final List<StDeviceLocation> locations)
   {
-    return locations.entrySet()
-      .stream()
-      .map(e -> Map.entry(e.getKey(), transformLocation(e.getValue())))
-      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    return locations.stream()
+      .map(St1DataHDeviceLocationHistory::transformLocation)
+      .toList();
   }
 
   private static St1DataLocation transformLocation(
@@ -105,6 +109,6 @@ public final class St1DataHDeviceLocationsGet
   @Override
   protected String name()
   {
-    return "DataDevices";
+    return "DeviceLocationHistory";
   }
 }

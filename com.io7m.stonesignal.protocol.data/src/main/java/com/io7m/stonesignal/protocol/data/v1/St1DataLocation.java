@@ -34,6 +34,11 @@ import java.util.Objects;
 @JsonSerialize
 @JsonDeserialize
 public record St1DataLocation(
+  @JsonProperty(value = "ID", required = true)
+  @JsonPropertyDescription(
+    "The location ID.")
+  long id,
+
   @JsonProperty(value = "Time", required = true)
   @JsonPropertyDescription(
     "The time the update was received.")

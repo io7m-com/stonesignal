@@ -27,6 +27,8 @@ import com.io7m.stonesignal.protocol.admin.v1.St1AdminDevicePut;
 import com.io7m.stonesignal.protocol.data.v1.St1DataDevice;
 import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceGetByID;
 import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceGetResponse;
+import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceLocationHistoryGet;
+import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceLocationHistoryGetResponse;
 import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceLocationsGet;
 import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceLocationsGetResponse;
 import com.io7m.stonesignal.protocol.data.v1.St1DataDevicesGet;
@@ -60,6 +62,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Clock;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
@@ -822,11 +825,345 @@ public class StServerDataTest
         LOG.debug("Got: {}: {}", rp.statusCode(), rp.body());
         assertEquals(200, rp.statusCode());
 
-        final var x =
+        final var r =
           dataMapper.readValue(
             rp.body(),
             St1DataDeviceLocationsGetResponse.class
           );
+
+        for (final var device : devices) {
+          final var d = r.locations().get(device.deviceId());
+          assertEquals(99, d.accuracy());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testDataDeviceLocationHistoryJSON()
+    throws Exception
+  {
+    final var devices = new ArrayList<St1AdminDevice>();
+    for (int index = 0; index < 5; ++index) {
+      devices.add(
+        new St1AdminDevice(
+          UUID.randomUUID(),
+          StDeviceKey.random().key(),
+          "Device " + index,
+          Map.of()
+        )
+      );
+    }
+
+    final var adminMapper =
+      St1AdminProtocolMapperJSON.get();
+    final var dataMapper =
+      St1DataProtocolMapperJSON.get();
+    final var deviceMapper =
+      St1DataProtocolMapperJSON.get();
+
+    try (final var client = HttpClient.newHttpClient()) {
+      for (final var device : devices) {
+        {
+          final var put =
+            HttpRequest.newBuilder(
+                URI.create("http://localhost:10001/1/0/device-put"))
+              .header(
+                "Authorization",
+                "Bearer " + configuration.adminAPI().apiKey())
+              .POST(HttpRequest.BodyPublishers.ofByteArray(
+                adminMapper.writeValueAsBytes(new St1AdminDevicePut(device))
+              ))
+              .build();
+
+          final var rp = client.send(put, BodyHandlers.ofByteArray());
+          LOG.debug("Got: {}: {}", rp.statusCode(), rp.body());
+          assertEquals(200, rp.statusCode());
+        }
+
+        for (int index = 0; index < 30; ++index) {
+          final var loc =
+            HttpRequest.newBuilder(
+                URI.create("http://localhost:10000/1/0/device-location-put"))
+              .header(
+                "Authorization",
+                "Bearer " + device.deviceKey())
+              .POST(HttpRequest.BodyPublishers.ofByteArray(
+                deviceMapper.writeValueAsBytes(new St1DeviceLocationUpdate(
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index
+                ))
+              ))
+              .build();
+
+          final var rl = client.send(loc, BodyHandlers.ofByteArray());
+          LOG.debug("Got: {}: {}", rl.statusCode(), rl.body());
+          assertEquals(200, rl.statusCode());
+        }
+      }
+
+      for (final var device : devices) {
+        final var put =
+          HttpRequest.newBuilder(
+              URI.create("http://localhost:10002/1/0/device-location-history"))
+            .header(
+              "Authorization",
+              "Bearer " + configuration.dataAPI().apiKey())
+            .POST(HttpRequest.BodyPublishers.ofByteArray(
+              adminMapper.writeValueAsBytes(
+                new St1DataDeviceLocationHistoryGet(
+                  device.deviceId(),
+                  OffsetDateTime.now().minusHours(1L),
+                  1000
+                ))
+            ))
+            .build();
+
+        final var rp = client.send(put, BodyHandlers.ofByteArray());
+        LOG.debug("Got: {}: {}", rp.statusCode(), rp.body());
+        assertEquals(200, rp.statusCode());
+
+        final var r =
+          dataMapper.readValue(
+            rp.body(),
+            St1DataDeviceLocationHistoryGetResponse.class
+          );
+
+        for (int index = 0; index < 30; ++index) {
+          assertEquals(
+            index,
+            r.locations().get(index).accuracy()
+          );
+        }
+      }
+    }
+  }
+
+
+
+
+
+
+
+  @Test
+  public void testDataDeviceLocationsCBOR()
+    throws Exception
+  {
+    final var devices = new ArrayList<St1AdminDevice>();
+    for (int index = 0; index < 5; ++index) {
+      devices.add(
+        new St1AdminDevice(
+          UUID.randomUUID(),
+          StDeviceKey.random().key(),
+          "Device " + index,
+          Map.of()
+        )
+      );
+    }
+
+    final var adminMapper =
+      St1AdminProtocolMapperCBOR.get();
+    final var dataMapper =
+      St1DataProtocolMapperCBOR.get();
+    final var deviceMapper =
+      St1DataProtocolMapperCBOR.get();
+
+    try (final var client = HttpClient.newHttpClient()) {
+      for (final var device : devices) {
+        {
+          final var put =
+            HttpRequest.newBuilder(
+                URI.create("http://localhost:10001/1/0/device-put"))
+              .header("Content-Type", "application/stonesignal+cbor")
+              .header(
+                "Authorization",
+                "Bearer " + configuration.adminAPI().apiKey())
+              .POST(HttpRequest.BodyPublishers.ofByteArray(
+                adminMapper.writeValueAsBytes(new St1AdminDevicePut(device))
+              ))
+              .build();
+
+          final var rp = client.send(put, BodyHandlers.ofByteArray());
+          LOG.debug("Got: {}: {}", rp.statusCode(), rp.body());
+          assertEquals(200, rp.statusCode());
+        }
+
+        for (int index = 0; index < 100; ++index) {
+          final var loc =
+            HttpRequest.newBuilder(
+                URI.create("http://localhost:10000/1/0/device-location-put"))
+              .header("Content-Type", "application/stonesignal+cbor")
+              .header(
+                "Authorization",
+                "Bearer " + device.deviceKey())
+              .POST(HttpRequest.BodyPublishers.ofByteArray(
+                deviceMapper.writeValueAsBytes(new St1DeviceLocationUpdate(
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index
+                ))
+              ))
+              .build();
+
+          final var rl = client.send(loc, BodyHandlers.ofByteArray());
+          LOG.debug("Got: {}: {}", rl.statusCode(), rl.body());
+          assertEquals(200, rl.statusCode());
+        }
+      }
+
+      {
+        final var put =
+          HttpRequest.newBuilder(
+              URI.create("http://localhost:10002/1/0/device-locations"))
+            .header("Content-Type", "application/stonesignal+cbor")
+            .header(
+              "Authorization",
+              "Bearer " + configuration.dataAPI().apiKey())
+            .POST(HttpRequest.BodyPublishers.ofByteArray(
+              adminMapper.writeValueAsBytes(new St1DataDeviceLocationsGet())
+            ))
+            .build();
+
+        final var rp = client.send(put, BodyHandlers.ofByteArray());
+        LOG.debug("Got: {}: {}", rp.statusCode(), rp.body());
+        assertEquals(200, rp.statusCode());
+
+        final var r =
+          dataMapper.readValue(
+            rp.body(),
+            St1DataDeviceLocationsGetResponse.class
+          );
+
+        for (final var device : devices) {
+          final var d = r.locations().get(device.deviceId());
+          assertEquals(99, d.accuracy());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testDataDeviceLocationHistoryCBOR()
+    throws Exception
+  {
+    final var devices = new ArrayList<St1AdminDevice>();
+    for (int index = 0; index < 5; ++index) {
+      devices.add(
+        new St1AdminDevice(
+          UUID.randomUUID(),
+          StDeviceKey.random().key(),
+          "Device " + index,
+          Map.of()
+        )
+      );
+    }
+
+    final var adminMapper =
+      St1AdminProtocolMapperCBOR.get();
+    final var dataMapper =
+      St1DataProtocolMapperCBOR.get();
+    final var deviceMapper =
+      St1DataProtocolMapperCBOR.get();
+
+    try (final var client = HttpClient.newHttpClient()) {
+      for (final var device : devices) {
+        {
+          final var put =
+            HttpRequest.newBuilder(
+                URI.create("http://localhost:10001/1/0/device-put"))
+              .header("Content-Type", "application/stonesignal+cbor")
+              .header(
+                "Authorization",
+                "Bearer " + configuration.adminAPI().apiKey())
+              .POST(HttpRequest.BodyPublishers.ofByteArray(
+                adminMapper.writeValueAsBytes(new St1AdminDevicePut(device))
+              ))
+              .build();
+
+          final var rp = client.send(put, BodyHandlers.ofByteArray());
+          LOG.debug("Got: {}: {}", rp.statusCode(), rp.body());
+          assertEquals(200, rp.statusCode());
+        }
+
+        for (int index = 0; index < 30; ++index) {
+          final var loc =
+            HttpRequest.newBuilder(
+                URI.create("http://localhost:10000/1/0/device-location-put"))
+              .header("Content-Type", "application/stonesignal+cbor")
+              .header(
+                "Authorization",
+                "Bearer " + device.deviceKey())
+              .POST(HttpRequest.BodyPublishers.ofByteArray(
+                deviceMapper.writeValueAsBytes(new St1DeviceLocationUpdate(
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index,
+                  index
+                ))
+              ))
+              .build();
+
+          final var rl = client.send(loc, BodyHandlers.ofByteArray());
+          LOG.debug("Got: {}: {}", rl.statusCode(), rl.body());
+          assertEquals(200, rl.statusCode());
+        }
+      }
+
+      for (final var device : devices) {
+        final var put =
+          HttpRequest.newBuilder(
+              URI.create("http://localhost:10002/1/0/device-location-history"))
+            .header("Content-Type", "application/stonesignal+cbor")
+            .header(
+              "Authorization",
+              "Bearer " + configuration.dataAPI().apiKey())
+            .POST(HttpRequest.BodyPublishers.ofByteArray(
+              adminMapper.writeValueAsBytes(
+                new St1DataDeviceLocationHistoryGet(
+                  device.deviceId(),
+                  OffsetDateTime.now().minusHours(1L),
+                  1000
+                ))
+            ))
+            .build();
+
+        final var rp = client.send(put, BodyHandlers.ofByteArray());
+        LOG.debug("Got: {}: {}", rp.statusCode(), rp.body());
+        assertEquals(200, rp.statusCode());
+
+        final var r =
+          dataMapper.readValue(
+            rp.body(),
+            St1DataDeviceLocationHistoryGetResponse.class
+          );
+
+        for (int index = 0; index < 30; ++index) {
+          assertEquals(
+            index,
+            r.locations().get(index).accuracy()
+          );
+        }
       }
     }
   }
