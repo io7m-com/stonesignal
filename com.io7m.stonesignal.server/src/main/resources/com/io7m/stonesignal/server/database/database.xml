@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Schemas xmlns="urn:com.io7m.trasco.database.statements:1:0">
+  <Schema versionCurrent="0">
+    <Comment>
+      The stonesignal role is a least-privilege role that can perform only those
+      operations required to run the system and no others. The role is initially
+      set to "nologin" as a password will be assigned later and logins enabled.
+    </Comment>
+
+    <Statement><![CDATA[
+DROP ROLE IF EXISTS stonesignal;
+]]></Statement>
+    <Statement><![CDATA[
+CREATE ROLE stonesignal with nosuperuser nocreatedb nocreaterole noinherit nologin;
+]]></Statement>
+
+    <Comment>
+      The stonesignal_none role is a no-privilege role that cannot perform any
+      actions.
+    </Comment>
+
+    <Statement><![CDATA[
+DROP ROLE IF EXISTS stonesignal_none;
+]]></Statement>
+    <Statement><![CDATA[
+CREATE ROLE stonesignal_none WITH nosuperuser nocreatedb nocreaterole noinherit nologin;
+]]></Statement>
+
+    <Comment>
+      The schema_version table stores the current version of the database
+      schema. Implementations are expected to query this table on connecting to
+      the database in order to ensure that the calling code is compatible with
+      the tables in the database.
+    </Comment>
+
+    <Statement><![CDATA[
+CREATE TABLE schema_version (
+  version_lock            CHAR(1) NOT NULL DEFAULT 'X',
+  version_application_id  TEXT    NOT NULL,
+  version_number          BIGINT  NOT NULL,
+
+  CONSTRAINT check_lock_primary
+    PRIMARY KEY (version_lock),
+
+  CONSTRAINT check_lock_locked
+    CHECK (version_lock = 'X')
+)
+]]></Statement>
+  </Schema>
+
+  <Schema versionCurrent="1">
+    <Statement><![CDATA[
+CREATE TABLE devices (
+  device_id       UUID     NOT NULL,
+  device_key      CHAR(64) NOT NULL,
+  device_name     TEXT     NOT NULL,
+  device_metadata JSONB    NOT NULL,
+  device_deleted  BOOLEAN  NOT NULL DEFAULT FALSE,
+
+  CONSTRAINT device_id_primary_key
+    PRIMARY KEY (device_id),
+
+  CONSTRAINT device_key_unique
+    UNIQUE (device_key),
+
+  CONSTRAINT device_key_valid
+    CHECK (device_key ~ '^([A-F0-9]{64})$')
+)
+]]></Statement>
+
+    <Statement><![CDATA[
+GRANT INSERT, UPDATE, SELECT, DELETE ON devices TO stonesignal
+]]></Statement>
+
+    <Statement><![CDATA[
+CREATE TABLE device_location_updates (
+  dlu_id      BIGINT                    NOT NULL GENERATED ALWAYS AS IDENTITY,
+  dlu_device  UUID                      NOT NULL,
+  dlu_time    TIMESTAMP WITH TIME ZONE  NOT NULL,
+  dlu_data    JSONB                     NOT NULL,
+
+  CONSTRAINT device_location_updates_id_primary_key
+    PRIMARY KEY (dlu_id),
+
+  CONSTRAINT device_location_updates_device_exists
+    FOREIGN KEY (dlu_device) REFERENCES devices (device_id)
+)
+]]></Statement>
+
+    <Statement><![CDATA[
+GRANT INSERT, SELECT ON device_location_updates TO stonesignal
+]]></Statement>
+
+    <Statement><![CDATA[
+CREATE TABLE audit (
+  au_id       BIGINT                    NOT NULL GENERATED ALWAYS AS IDENTITY,
+  au_time     TIMESTAMP WITH TIME ZONE  NOT NULL,
+  au_type     TEXT                      NOT NULL,
+  au_data     JSONB                     NOT NULL
+)
+]]></Statement>
+
+    <Statement><![CDATA[
+GRANT INSERT, SELECT ON audit TO stonesignal
+]]></Statement>
+  </Schema>
+</Schemas>
