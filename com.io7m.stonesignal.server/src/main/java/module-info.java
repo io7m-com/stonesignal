@@ -26,6 +26,7 @@ import com.io7m.stonesignal.server.database.StDBDevicePut;
 import com.io7m.stonesignal.server.database.StDBDevicesGet;
 import com.io7m.stonesignal.server.database.StDatabaseQueryProviderType;
 import com.io7m.stonesignal.server.telemetry.StTelemetryServiceFactoryType;
+import com.io7m.stonesignal.server.telemetry.StTelemetryServices;
 
 /**
  * Position recorder (Server)
@@ -66,6 +67,7 @@ module com.io7m.stonesignal.server
   requires io.opentelemetry.sdk.metrics;
   requires io.opentelemetry.sdk.trace;
   requires io.opentelemetry.sdk;
+  requires java.net.http;
   requires java.sql;
   requires jul.to.slf4j;
   requires org.jooq;
@@ -96,6 +98,9 @@ module com.io7m.stonesignal.server
     StDBDeviceLocationsGet,
     StDBDevicePut,
     StDBDevicesGet;
+
+  provides StTelemetryServiceFactoryType with
+    StTelemetryServices;
 
   provides StServerFactoryType with
     StServers;

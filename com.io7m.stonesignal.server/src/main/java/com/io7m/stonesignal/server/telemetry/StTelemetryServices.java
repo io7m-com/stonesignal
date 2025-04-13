@@ -162,11 +162,6 @@ public final class StTelemetryServices
             .setEndpoint(endpoint)
             .build();
         }
-        case GRPC -> {
-          yield OtlpGrpcMetricExporter.builder()
-            .setEndpoint(endpoint)
-            .build();
-        }
       };
 
     final var periodicMetricReader =
@@ -198,11 +193,6 @@ public final class StTelemetryServices
             .setEndpoint(endpoint)
             .build();
         }
-        case GRPC -> {
-          yield OtlpGrpcLogRecordExporter.builder()
-            .setEndpoint(endpoint)
-            .build();
-        }
       };
 
     final var processor =
@@ -230,11 +220,6 @@ public final class StTelemetryServices
       switch (traces.protocol()) {
         case HTTP -> {
           yield OtlpHttpSpanExporter.builder()
-            .setEndpoint(endpoint)
-            .build();
-        }
-        case GRPC -> {
-          yield OtlpGrpcSpanExporter.builder()
             .setEndpoint(endpoint)
             .build();
         }

@@ -290,12 +290,6 @@ public record StConfiguration(
     public enum OTLPProtocol
     {
       /**
-       * gRPC
-       */
-
-      GRPC,
-
-      /**
        * HTTP(s)
        */
 
