@@ -34,7 +34,7 @@ import java.util.UUID;
 @JsonSerialize
 @JsonDeserialize
 public record St1AdminDeviceGetByID(
-  @JsonProperty("DeviceID")
+  @JsonProperty(value = "DeviceID", required = true)
   @JsonPropertyDescription("The device ID.")
   UUID deviceId)
   implements St1AdminMessageType

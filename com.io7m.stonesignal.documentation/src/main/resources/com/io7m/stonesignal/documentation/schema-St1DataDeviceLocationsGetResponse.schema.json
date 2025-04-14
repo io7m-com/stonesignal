@@ -1,0 +1,16 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "Map(UUID,St1DataLocation)" : {
+      "type" : "object"
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "Locations" : {
+      "$ref" : "#/$defs/Map(UUID,St1DataLocation)",
+      "description" : "The device locations by ID."
+    }
+  },
+  "required" : [ "Locations" ]
+}

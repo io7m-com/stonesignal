@@ -33,7 +33,7 @@ import java.util.Objects;
 @JsonSerialize
 @JsonDeserialize
 public record St1AdminDeviceGetByKey(
-  @JsonProperty("DeviceKey")
+  @JsonProperty(value = "DeviceKey", required = true)
   @JsonPropertyDescription("The device key.")
   String deviceKey)
   implements St1AdminMessageType

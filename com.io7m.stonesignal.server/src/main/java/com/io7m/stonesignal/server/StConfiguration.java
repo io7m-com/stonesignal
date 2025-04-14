@@ -256,12 +256,16 @@ public record StConfiguration(
   @JsonDeserialize
   public record OpenTelemetry(
     @JsonProperty(value = "ServiceName", required = true)
+    @JsonPropertyDescription("The logical service name.")
     String logicalServiceName,
     @JsonProperty(value = "Logs")
+    @JsonPropertyDescription("The configuration for logs.")
     Optional<Logs> logs,
     @JsonProperty(value = "Metrics")
+    @JsonPropertyDescription("The configuration for metrics.")
     Optional<Metrics> metrics,
     @JsonProperty(value = "Traces")
+    @JsonPropertyDescription("The configuration for traces.")
     Optional<Traces> traces)
   {
     /**
@@ -307,8 +311,10 @@ public record StConfiguration(
     @JsonDeserialize
     public record Metrics(
       @JsonProperty(value = "Endpoint", required = true)
+      @JsonPropertyDescription("The endpoint address for OTLP data.")
       URI endpoint,
       @JsonProperty(value = "Protocol", required = true)
+      @JsonPropertyDescription("The protocol used to deliver OTLP data.")
       OTLPProtocol protocol)
     {
       /**
@@ -333,8 +339,10 @@ public record StConfiguration(
     @JsonDeserialize
     public record Traces(
       @JsonProperty(value = "Endpoint", required = true)
+      @JsonPropertyDescription("The endpoint address for OTLP data.")
       URI endpoint,
       @JsonProperty(value = "Protocol", required = true)
+      @JsonPropertyDescription("The protocol used to deliver OTLP data.")
       OTLPProtocol protocol)
     {
       /**
@@ -359,8 +367,10 @@ public record StConfiguration(
     @JsonDeserialize
     public record Logs(
       @JsonProperty(value = "Endpoint", required = true)
+      @JsonPropertyDescription("The endpoint address for OTLP data.")
       URI endpoint,
       @JsonProperty(value = "Protocol", required = true)
+      @JsonPropertyDescription("The protocol used to deliver OTLP data.")
       OTLPProtocol protocol)
     {
       /**

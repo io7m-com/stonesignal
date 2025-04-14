@@ -1,0 +1,16 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "Map(UUID,String)" : {
+      "type" : "object"
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "Devices" : {
+      "$ref" : "#/$defs/Map(UUID,String)",
+      "description" : "The devices by ID."
+    }
+  },
+  "required" : [ "Devices" ]
+}

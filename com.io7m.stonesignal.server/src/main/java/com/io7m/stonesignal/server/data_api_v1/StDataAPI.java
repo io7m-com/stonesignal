@@ -157,6 +157,7 @@ public final class StDataAPI
           Map.entry(SO_REUSEADDR, Boolean.TRUE),
           Map.entry(SO_REUSEPORT, Boolean.TRUE)
         ))
+        .maxPayloadSize(32768)
         .routing(routingBuilder)
         .build();
 

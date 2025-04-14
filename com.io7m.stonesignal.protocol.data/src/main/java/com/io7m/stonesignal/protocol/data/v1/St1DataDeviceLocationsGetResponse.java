@@ -34,7 +34,7 @@ import java.util.UUID;
 @JsonSerialize
 @JsonDeserialize
 public record St1DataDeviceLocationsGetResponse(
-  @JsonProperty("Locations")
+  @JsonProperty(value = "Locations", required = true)
   @JsonPropertyDescription("The device locations by ID.")
   Map<UUID, St1DataLocation> locations)
   implements St1DataMessageType

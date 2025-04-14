@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section xmlns="urn:com.io7m.structural:8:0"
+         title="API Access"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="6b3b90c3-4f57-4642-be16-80c8fadaf3f5">
+
+  <xi:include href="api-admin.xml"/>
+  <xi:include href="api-device.xml"/>
+  <xi:include href="api-data.xml"/>
+
+</Section>

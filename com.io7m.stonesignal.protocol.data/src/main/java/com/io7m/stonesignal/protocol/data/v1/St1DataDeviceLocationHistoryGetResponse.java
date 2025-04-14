@@ -33,7 +33,7 @@ import java.util.List;
 @JsonSerialize
 @JsonDeserialize
 public record St1DataDeviceLocationHistoryGetResponse(
-  @JsonProperty("Locations")
+  @JsonProperty(value = "Locations", required = true)
   @JsonPropertyDescription("The device locations.")
   List<St1DataLocation> locations)
   implements St1DataMessageType

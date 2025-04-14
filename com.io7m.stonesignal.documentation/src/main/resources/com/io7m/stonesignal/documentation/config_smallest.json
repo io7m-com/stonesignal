@@ -1,0 +1,29 @@
+{
+  // Line-based comments are permitted.
+  "Database": {
+    "Kind": "POSTGRESQL",
+    "OwnerRole": "stonesignal_owner",
+    "OwnerPassword": "exampleownerpassword",
+    "WorkerPassword": "exampleworkerpassword",
+    "Address": "db.example.com",
+    "Port": 5432,
+    "Name": "stonesignal",
+    "Upgrade": true,
+    "MinimumConnections": 1,
+    "MaximumConnections": 10
+  },
+  "DeviceAPI": {
+    "Host": "localhost",
+    "Port": 10000
+  },
+  "AdminAPI": {
+    "Host": "localhost",
+    "Port": 10001,
+    "APIKey": "1DE48CA6D6A5C172B259850D9A060AE9E51BDB2DF28CEDB19DFF1A4DDCC3521F"
+  },
+  "DataAPI": {
+    "Host": "localhost",
+    "Port": 10002,
+    "APIKey": "164FA81EFDC9D27C4FD7BD0875C0C4702AE75D9DB9148BBD79EE0B6E531EA7A2"
+  }
+}

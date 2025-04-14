@@ -1,0 +1,29 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "Map(String,String)" : {
+      "type" : "object"
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "DeviceID" : {
+      "type" : "string",
+      "format" : "uuid",
+      "description" : "The device ID."
+    },
+    "DeviceKey" : {
+      "type" : "string",
+      "description" : "The device key."
+    },
+    "Metadata" : {
+      "$ref" : "#/$defs/Map(String,String)",
+      "description" : "The device metadata."
+    },
+    "Name" : {
+      "type" : "string",
+      "description" : "The device name."
+    }
+  },
+  "required" : [ "DeviceID", "DeviceKey", "Name" ]
+}

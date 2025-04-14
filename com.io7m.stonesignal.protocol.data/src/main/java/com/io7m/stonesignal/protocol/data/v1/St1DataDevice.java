@@ -35,15 +35,15 @@ import java.util.UUID;
 @JsonSerialize
 @JsonDeserialize
 public record St1DataDevice(
-  @JsonProperty("DeviceID")
+  @JsonProperty(value = "DeviceID", required = true)
   @JsonPropertyDescription("The device ID.")
   UUID deviceId,
 
-  @JsonProperty("Name")
+  @JsonProperty(value = "Name", required = true)
   @JsonPropertyDescription("The device name.")
   String name,
 
-  @JsonProperty("Metadata")
+  @JsonProperty(value = "Metadata", required = true)
   @JsonPropertyDescription("The device metadata.")
   Map<String, String> metadata)
 {

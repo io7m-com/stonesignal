@@ -80,6 +80,7 @@ public final class StDBDeviceLocationUpdateSearch
         )
         .from(DEVICE_LOCATION_UPDATES)
         .where(conditions)
+        .orderBy(DEVICE_LOCATION_UPDATES.DLU_TIME.asc())
         .limit(search.count())
         .fetch();
 

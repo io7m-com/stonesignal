@@ -35,15 +35,15 @@ import java.util.UUID;
 @JsonSerialize
 @JsonDeserialize
 public record St1DataDeviceLocationHistoryGet(
-  @JsonProperty("DeviceID")
+  @JsonProperty(value = "DeviceID", required = true)
   @JsonPropertyDescription("The device ID.")
   UUID deviceId,
 
-  @JsonProperty("TimeStart")
+  @JsonProperty(value = "TimeStart", required = true)
   @JsonPropertyDescription("The start time.")
   OffsetDateTime timeStart,
 
-  @JsonProperty("Count")
+  @JsonProperty(value = "Count", required = true)
   @JsonPropertyDescription("The maximum number of events to return.")
   int count)
   implements St1DataMessageType

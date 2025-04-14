@@ -10,6 +10,9 @@
     <target>System.err</target>
   </appender>
 
+  <logger name="io.helidon"
+          level="ERROR"/>
+
   <root level="INFO">
     <appender-ref ref="STDERR"/>
   </root>

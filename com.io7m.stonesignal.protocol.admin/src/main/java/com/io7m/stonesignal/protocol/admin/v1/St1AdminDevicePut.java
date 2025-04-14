@@ -33,7 +33,7 @@ import java.util.Objects;
 @JsonSerialize
 @JsonDeserialize
 public record St1AdminDevicePut(
-  @JsonProperty("Device")
+  @JsonProperty(value = "Device", required = true)
   @JsonPropertyDescription("The device.")
   St1AdminDevice device)
   implements St1AdminMessageType

@@ -1,0 +1,41 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "Map(String,String)" : {
+      "type" : "object"
+    },
+    "St1DataDevice" : {
+      "type" : "object",
+      "properties" : {
+        "DeviceID" : {
+          "type" : "string",
+          "format" : "uuid",
+          "description" : "The device ID."
+        },
+        "Metadata" : {
+          "$ref" : "#/$defs/Map(String,String)",
+          "description" : "The device metadata."
+        },
+        "Name" : {
+          "type" : "string",
+          "description" : "The device name."
+        }
+      },
+      "required" : [ "DeviceID", "Metadata", "Name" ]
+    },
+    "St1DataDevice-nullable" : {
+      "anyOf" : [ {
+        "type" : "null"
+      }, {
+        "$ref" : "#/$defs/St1DataDevice"
+      } ]
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "Device" : {
+      "$ref" : "#/$defs/St1DataDevice-nullable",
+      "description" : "The device."
+    }
+  }
+}

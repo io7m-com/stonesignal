@@ -1,0 +1,67 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "properties" : {
+    "Accuracy" : {
+      "type" : "number",
+      "format" : "double",
+      "description" : "The estimated horizontal accuracy radius in meters of this location."
+    },
+    "Altitude" : {
+      "type" : "number",
+      "format" : "double",
+      "description" : "The altitude of this location in meters above the WGS84 reference ellipsoid."
+    },
+    "Bearing" : {
+      "type" : "number",
+      "format" : "double",
+      "description" : "The bearing at the time of this location in degrees. "
+    },
+    "BearingAccuracy" : {
+      "type" : "number",
+      "format" : "double",
+      "description" : "The estimated bearing accuracy in degrees of this location."
+    },
+    "ID" : {
+      "type" : "integer",
+      "format" : "int64",
+      "description" : "The location ID."
+    },
+    "Latitude" : {
+      "type" : "number",
+      "format" : "double",
+      "description" : "The latitude in degrees."
+    },
+    "Longitude" : {
+      "type" : "number",
+      "format" : "double",
+      "description" : "The longitude in degrees."
+    },
+    "MSLAltitude" : {
+      "type" : "number",
+      "format" : "double",
+      "description" : "The Mean Sea Level altitude of this location in meters."
+    },
+    "MSLAltitudeAccuracy" : {
+      "type" : "number",
+      "format" : "double",
+      "description" : "The estimated Mean Sea Level altitude accuracy in meters."
+    },
+    "Speed" : {
+      "type" : "number",
+      "format" : "double",
+      "description" : "The speed at the time of this location in meters per second."
+    },
+    "SpeedAccuracy" : {
+      "type" : "number",
+      "format" : "double",
+      "description" : "The estimated speed accuracy in meters per second of this location."
+    },
+    "Time" : {
+      "type" : "string",
+      "format" : "date-time",
+      "description" : "The time the update was received."
+    }
+  },
+  "required" : [ "ID", "Time" ]
+}

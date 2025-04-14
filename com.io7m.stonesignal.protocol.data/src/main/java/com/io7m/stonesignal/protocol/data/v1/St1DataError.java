@@ -18,6 +18,7 @@
 package com.io7m.stonesignal.protocol.data.v1;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -33,9 +34,11 @@ import java.util.Objects;
 @JsonSerialize
 @JsonDeserialize
 public record St1DataError(
-  @JsonProperty("ErrorCode")
+  @JsonProperty(value = "ErrorCode", required = true)
+  @JsonPropertyDescription("The error code.")
   String errorCode,
-  @JsonProperty("Message")
+  @JsonProperty(value = "Message", required = true)
+  @JsonPropertyDescription("The human-readable error message.")
   String message)
   implements St1DataMessageType
 {

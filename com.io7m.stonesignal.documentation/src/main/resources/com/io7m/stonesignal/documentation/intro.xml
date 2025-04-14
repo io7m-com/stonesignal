@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section xmlns="urn:com.io7m.structural:8:0"
+         id="6c1816ac-b3ec-43df-a4a6-d623b5ac297b"
+         title="Introduction">
+
+  <Paragraph>
+    The <Term type="package">stonesignal</Term> package provides a server for recording
+    device location data.
+  </Paragraph>
+
+  <FormalItem title="Features">
+    <ListUnordered>
+      <Item>
+        Record GPS and other location information from devices running an appropriate client.
+      </Item>
+      <Item>
+        Full API access for all operations.
+      </Item>
+      <Item>
+        Complete audit log; every operation that changes the state of the system is logged in an append-only log.
+      </Item>
+      <Item>
+        Fully instrumented with <LinkExternal target="https://opentelemetry.io/">OpenTelemetry</LinkExternal>.
+      </Item>
+      <Item>
+        A small, easily auditable codebase.
+      </Item>
+      <Item>
+        An extensive automated test suite.
+      </Item>
+      <Item>
+        Platform independence. No platform-dependent code is included in any form, and installations can largely be
+        carried between platforms without changes.
+      </Item>
+      <Item>
+        <LinkExternal target="https://www.osgi.org/">OSGi</LinkExternal>-ready
+      </Item>
+      <Item>
+        <LinkExternal target="https://en.wikipedia.org/wiki/Java_Platform_Module_System">JPMS</LinkExternal>-ready
+      </Item>
+      <Item>
+        Support for <LinkExternal target="https://www.io7m.com/software/canonmill">Canonmill</LinkExternal> keystores.
+      </Item>
+      <Item>
+        ISC license.
+      </Item>
+    </ListUnordered>
+  </FormalItem>
+
+</Section>

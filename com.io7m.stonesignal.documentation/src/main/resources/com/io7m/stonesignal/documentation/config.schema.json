@@ -1,0 +1,296 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "AdminAPI" : {
+      "type" : "object",
+      "properties" : {
+        "APIKey" : {
+          "type" : "string",
+          "description" : "The API key."
+        },
+        "Host" : {
+          "type" : "string",
+          "description" : "The host address to which to bind."
+        },
+        "Port" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The host port to which to bind."
+        },
+        "TLS" : {
+          "$ref" : "#/$defs/TLS-nullable",
+          "description" : "The TLS configuration."
+        }
+      },
+      "required" : [ "APIKey", "Host", "Port" ]
+    },
+    "DataAPI" : {
+      "type" : "object",
+      "properties" : {
+        "APIKey" : {
+          "type" : "string",
+          "description" : "The API key."
+        },
+        "Host" : {
+          "type" : "string",
+          "description" : "The host address to which to bind."
+        },
+        "Port" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The host port to which to bind."
+        },
+        "TLS" : {
+          "$ref" : "#/$defs/TLS-nullable",
+          "description" : "The TLS configuration."
+        }
+      },
+      "required" : [ "APIKey", "Host", "Port" ]
+    },
+    "Database" : {
+      "type" : "object",
+      "properties" : {
+        "Address" : {
+          "type" : "string",
+          "description" : "The database address."
+        },
+        "Kind" : {
+          "$ref" : "#/$defs/DatabaseKind",
+          "description" : "The database kind."
+        },
+        "MaximumConnections" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The maximum connections for pooling."
+        },
+        "MinimumConnections" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The minimum connections for pooling."
+        },
+        "Name" : {
+          "type" : "string",
+          "description" : "The database name."
+        },
+        "OwnerPassword" : {
+          "type" : "string",
+          "description" : "The database owner password."
+        },
+        "OwnerRole" : {
+          "type" : "string",
+          "description" : "The database owner role."
+        },
+        "Port" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The database port."
+        },
+        "ReaderPassword" : {
+          "type" : [ "string", "null" ],
+          "description" : "The database reader password."
+        },
+        "Upgrade" : {
+          "type" : "boolean",
+          "description" : "Upgrade the database?"
+        },
+        "WorkerPassword" : {
+          "type" : "string",
+          "description" : "The database worker password."
+        }
+      },
+      "required" : [ "Address", "Kind", "MaximumConnections", "MinimumConnections", "Name", "OwnerPassword", "OwnerRole", "Port", "Upgrade", "WorkerPassword" ]
+    },
+    "DatabaseKind" : {
+      "type" : "string",
+      "const" : "POSTGRESQL"
+    },
+    "DeviceAPI" : {
+      "type" : "object",
+      "properties" : {
+        "Host" : {
+          "type" : "string",
+          "description" : "The host address to which to bind."
+        },
+        "Port" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The host port to which to bind."
+        },
+        "TLS" : {
+          "$ref" : "#/$defs/TLS-nullable",
+          "description" : "The TLS configuration."
+        }
+      },
+      "required" : [ "Host", "Port" ]
+    },
+    "Logs" : {
+      "type" : "object",
+      "properties" : {
+        "Endpoint" : {
+          "type" : "string",
+          "format" : "uri",
+          "description" : "The endpoint address for OTLP data."
+        },
+        "Protocol" : {
+          "$ref" : "#/$defs/OTLPProtocol",
+          "description" : "The protocol used to deliver OTLP data."
+        }
+      },
+      "required" : [ "Endpoint", "Protocol" ]
+    },
+    "Logs-nullable" : {
+      "anyOf" : [ {
+        "type" : "null"
+      }, {
+        "$ref" : "#/$defs/Logs"
+      } ]
+    },
+    "Metrics" : {
+      "type" : "object",
+      "properties" : {
+        "Endpoint" : {
+          "type" : "string",
+          "format" : "uri",
+          "description" : "The endpoint address for OTLP data."
+        },
+        "Protocol" : {
+          "$ref" : "#/$defs/OTLPProtocol",
+          "description" : "The protocol used to deliver OTLP data."
+        }
+      },
+      "required" : [ "Endpoint", "Protocol" ]
+    },
+    "Metrics-nullable" : {
+      "anyOf" : [ {
+        "type" : "null"
+      }, {
+        "$ref" : "#/$defs/Metrics"
+      } ]
+    },
+    "OTLPProtocol" : {
+      "type" : "string",
+      "const" : "HTTP"
+    },
+    "OpenTelemetry" : {
+      "type" : "object",
+      "properties" : {
+        "Logs" : {
+          "$ref" : "#/$defs/Logs-nullable",
+          "description" : "The configuration for logs."
+        },
+        "Metrics" : {
+          "$ref" : "#/$defs/Metrics-nullable",
+          "description" : "The configuration for metrics."
+        },
+        "ServiceName" : {
+          "type" : "string",
+          "description" : "The logical service name."
+        },
+        "Traces" : {
+          "$ref" : "#/$defs/Traces-nullable",
+          "description" : "The configuration for traces."
+        }
+      },
+      "required" : [ "ServiceName" ]
+    },
+    "OpenTelemetry-nullable" : {
+      "anyOf" : [ {
+        "type" : "null"
+      }, {
+        "$ref" : "#/$defs/OpenTelemetry"
+      } ]
+    },
+    "Path" : {
+      "type" : "object"
+    },
+    "TLS" : {
+      "type" : "object",
+      "properties" : {
+        "KeyStore" : {
+          "$ref" : "#/$defs/TLSStore",
+          "description" : "The key store."
+        },
+        "TrustStore" : {
+          "$ref" : "#/$defs/TLSStore",
+          "description" : "The trust store."
+        }
+      },
+      "required" : [ "KeyStore", "TrustStore" ]
+    },
+    "TLS-nullable" : {
+      "anyOf" : [ {
+        "type" : "null"
+      }, {
+        "$ref" : "#/$defs/TLS"
+      } ]
+    },
+    "TLSStore" : {
+      "type" : "object",
+      "properties" : {
+        "Password" : {
+          "type" : "string",
+          "description" : "The store password."
+        },
+        "Path" : {
+          "$ref" : "#/$defs/Path",
+          "description" : "The store path."
+        },
+        "Provider" : {
+          "type" : "string",
+          "description" : "The store provider."
+        },
+        "Type" : {
+          "type" : "string",
+          "description" : "The store type."
+        }
+      },
+      "required" : [ "Password", "Path", "Provider", "Type" ]
+    },
+    "Traces" : {
+      "type" : "object",
+      "properties" : {
+        "Endpoint" : {
+          "type" : "string",
+          "format" : "uri",
+          "description" : "The endpoint address for OTLP data."
+        },
+        "Protocol" : {
+          "$ref" : "#/$defs/OTLPProtocol",
+          "description" : "The protocol used to deliver OTLP data."
+        }
+      },
+      "required" : [ "Endpoint", "Protocol" ]
+    },
+    "Traces-nullable" : {
+      "anyOf" : [ {
+        "type" : "null"
+      }, {
+        "$ref" : "#/$defs/Traces"
+      } ]
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "AdminAPI" : {
+      "$ref" : "#/$defs/AdminAPI",
+      "description" : "The admin API configuration."
+    },
+    "DataAPI" : {
+      "$ref" : "#/$defs/DataAPI",
+      "description" : "The data API configuration."
+    },
+    "Database" : {
+      "$ref" : "#/$defs/Database",
+      "description" : "The database configuration."
+    },
+    "DeviceAPI" : {
+      "$ref" : "#/$defs/DeviceAPI",
+      "description" : "The device API configuration."
+    },
+    "OpenTelemetry" : {
+      "$ref" : "#/$defs/OpenTelemetry-nullable",
+      "description" : "The OpenTelemetry configuration."
+    }
+  },
+  "required" : [ "AdminAPI", "DataAPI", "Database", "DeviceAPI" ]
+}
