@@ -17,17 +17,41 @@
 
 package com.io7m.stonesignal.server.database;
 
-import com.io7m.darco.api.DDatabaseQueryType;
-import com.io7m.stonesignal.server.devices.StDevice;
-
-import java.util.Optional;
-
 /**
- * device-get-by-id
+ * The standard database roles.
  */
 
-public interface StDBDeviceGetByIDType
-  extends DDatabaseQueryType<StDBDeviceGetByIDParameters, Optional<StDevice>>
+public final class StDatabaseRoles
 {
+  private StDatabaseRoles()
+  {
 
+  }
+
+  /**
+   * @return The worker role
+   */
+
+  public static String worker()
+  {
+    return "stonesignal";
+  }
+
+  /**
+   * @return The reader role
+   */
+
+  public static String reader()
+  {
+    return "stonesignal_reader";
+  }
+
+  /**
+   * @return The device role
+   */
+
+  public static String device()
+  {
+    return "stonesignal_device";
+  }
 }

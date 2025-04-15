@@ -31,6 +31,8 @@ import io.helidon.webserver.http.ServerResponse;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.io7m.stonesignal.server.database.StDatabaseRoles.reader;
+
 /**
  * devices
  */
@@ -58,7 +60,7 @@ public final class St1DataHDevicesGet
     this.read(request, St1DataDevicesGet.class);
 
     final Map<UUID, String> devices;
-    try (final var t = this.database.openTransaction()) {
+    try (final var t = this.database.openTransactionWithRole(reader())) {
       final var p = t.query(StDBDevicesGetType.class);
       devices = p.execute(DDatabaseUnit.UNIT);
     } catch (final DDatabaseException e) {

@@ -22,6 +22,7 @@ import com.io7m.repetoir.core.RPServiceDirectoryType;
 import com.io7m.stonesignal.protocol.data.v1.St1DataDevice;
 import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceGetByID;
 import com.io7m.stonesignal.protocol.data.v1.St1DataDeviceGetResponse;
+import com.io7m.stonesignal.server.database.StDBDeviceGetByIDParameters;
 import com.io7m.stonesignal.server.database.StDBDeviceGetByIDType;
 import com.io7m.stonesignal.server.database.StDatabaseType;
 import io.helidon.http.Status;
@@ -29,6 +30,8 @@ import io.helidon.webserver.http.ServerRequest;
 import io.helidon.webserver.http.ServerResponse;
 
 import java.util.Optional;
+
+import static com.io7m.stonesignal.server.database.StDatabaseRoles.reader;
 
 /**
  * device-get-by-id
@@ -58,10 +61,10 @@ public final class St1DataHDeviceGetByID
       this.read(request, St1DataDeviceGetByID.class);
 
     final Optional<St1DataDevice> device;
-    try (final var t = this.database.openTransaction()) {
+    try (final var t = this.database.openTransactionWithRole(reader())) {
       final var p = t.query(StDBDeviceGetByIDType.class);
       device =
-        p.execute(data.deviceId())
+        p.execute(new StDBDeviceGetByIDParameters(data.deviceId(), false))
           .map(x -> {
             return new St1DataDevice(
               x.id(),

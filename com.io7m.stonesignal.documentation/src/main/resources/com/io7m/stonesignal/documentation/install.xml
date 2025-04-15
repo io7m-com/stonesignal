@@ -149,7 +149,9 @@ postgres=# create database stonesignal with owner stonesignal_owner;
           create new roles, etc. This role is used by the <Term type="package">stonesignal</Term> package when creating
           the database during the first run of the server, and for upgrading database schemas later. Administrators
           are free to pick the name of the role, although it is recommended that the role be named
-          <Term type="constant">stonesignal_owner</Term> to make it clear as to the purpose of the role.
+          <Term type="constant">stonesignal_owner</Term> to make it clear as to the purpose of the role. The
+          <Term type="package">stonesignal</Term> package will create the other roles it uses for normal operation
+          automatically, and will manage their passwords based on the server configuration.
         </Paragraph>
         <Paragraph>
           If the <LinkExternal target="https://hub.docker.com/_/postgres/">PostgreSQL OCI image</LinkExternal> is used,
@@ -171,16 +173,25 @@ $ podman run \
           The <Term type="term">worker</Term> role is the role that is used for normal database operation. It is
           a role that has read/write access to all tables (except for the audit log which is restricted to
           being append-only), although it is not granted the ability to create new tables, drop tables, or do
-          other schema manipulation. The role is always named <Term type="constant">stonesignal</Term>, and adminstrators
-          are required to set a password for this role.
+          other schema manipulation. The role is always named <Term type="constant">stonesignal</Term>,
+          and adminstrators are required to set a password for this role.
         </Paragraph>
       </Subsection>
       <Subsection title="Reader" id="5d456422-0afa-4faf-9299-38669b5a3444">
         <Paragraph>
           The <Term type="term">reader</Term> role is a role that is permitted read-only access to some of the
-          database. It is effectively an optional role that can be used by various database metrics systems if
-          required. If a password is not specified for the role in the server's configuration file, then logging
-          in is not permitted at all.
+          database. Specifically, the role does not have access to columns containing secrets such as device
+          keys. The role is therefore safe for use by external systems that want to connect to the database
+          directly to do data analysis. The role is always named
+          <Term type="constant">stonesignal_reader</Term>,
+          and adminstrators are required to set a password for this role.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Device" id="3241a4f8-f8c5-48d4-ad24-20d4ae2e2749">
+        <Paragraph>
+          The <Term type="term">device</Term> role is a role that is permitted update access to some of the
+          database. The role is always named <Term type="constant">stonesignal_device</Term>,
+          and adminstrators are required to set a password for this role.
         </Paragraph>
       </Subsection>
     </Subsection>

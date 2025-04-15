@@ -22,6 +22,7 @@ import com.io7m.repetoir.core.RPServiceDirectoryType;
 import com.io7m.stonesignal.protocol.admin.v1.St1AdminDevice;
 import com.io7m.stonesignal.protocol.admin.v1.St1AdminDeviceGetByID;
 import com.io7m.stonesignal.protocol.admin.v1.St1AdminDeviceGetResponse;
+import com.io7m.stonesignal.server.database.StDBDeviceGetByIDParameters;
 import com.io7m.stonesignal.server.database.StDBDeviceGetByIDType;
 import com.io7m.stonesignal.server.database.StDatabaseType;
 import io.helidon.http.Status;
@@ -61,7 +62,7 @@ public final class St1AdminHDeviceGetByID
     try (final var t = this.database.openTransaction()) {
       final var p = t.query(StDBDeviceGetByIDType.class);
       device =
-        p.execute(data.deviceId())
+        p.execute(new StDBDeviceGetByIDParameters(data.deviceId(), true))
           .map(x -> {
             return new St1AdminDevice(
               x.id(),

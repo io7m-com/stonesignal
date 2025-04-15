@@ -125,6 +125,8 @@ public final class StDatabaseFactory
     throws SQLException
   {
     updateWorkerRolePassword(configuration, connection);
+    updateReaderRolePassword(configuration, connection);
+    updateDeviceRolePassword(configuration, connection);
   }
 
   @Override
@@ -137,8 +139,35 @@ public final class StDatabaseFactory
       .collect(Collectors.toList());
   }
 
+  private static void updateRole(
+    final Connection connection,
+    final String passwordText,
+    final String role)
+    throws SQLException
+  {
+    final var settings =
+      new Settings().withRenderNameCase(RenderNameCase.LOWER);
+    final var dslContext =
+      DSL.using(connection, POSTGRES, settings);
+
+    final var safePass =
+      dslContext.render(DSL.inline(passwordText));
+    final var sql =
+      "ALTER ROLE %s WITH PASSWORD %s"
+        .formatted(
+          role,
+          safePass
+        );
+
+    dslContext.execute(sql);
+
+    try (final var st = connection.createStatement()) {
+      st.execute("ALTER ROLE %s LOGIN".formatted(role));
+    }
+  }
+
   /**
-   * Update the worker role password. Might be a no-op.
+   * Update the worker role password.
    */
 
   private static void updateWorkerRolePassword(
@@ -148,19 +177,46 @@ public final class StDatabaseFactory
   {
     LOG.debug("Updating worker role");
 
-    final var passwordText =
-      configuration.configuration().database().workerRolePassword();
-    final var settings =
-      new Settings().withRenderNameCase(RenderNameCase.LOWER);
-    final var dslContext =
-      DSL.using(connection, POSTGRES, settings);
-    dslContext.execute(
-      "ALTER ROLE stonesignal WITH PASSWORD {0}",
-      DSL.inline(passwordText)
+    updateRole(
+      connection,
+      configuration.configuration().database().workerRolePassword(),
+      StDatabaseRoles.worker()
     );
+  }
 
-    try (var st = connection.createStatement()) {
-      st.execute("ALTER ROLE stonesignal LOGIN");
-    }
+  /**
+   * Update the reader role password.
+   */
+
+  private static void updateReaderRolePassword(
+    final StDatabaseConfiguration configuration,
+    final Connection connection)
+    throws SQLException
+  {
+    LOG.debug("Updating reader role");
+
+    updateRole(
+      connection,
+      configuration.configuration().database().readerRolePassword(),
+      StDatabaseRoles.reader()
+    );
+  }
+
+  /**
+   * Update the device role password.
+   */
+
+  private static void updateDeviceRolePassword(
+    final StDatabaseConfiguration configuration,
+    final Connection connection)
+    throws SQLException
+  {
+    LOG.debug("Updating device role");
+
+    updateRole(
+      connection,
+      configuration.configuration().database().deviceRolePassword(),
+      StDatabaseRoles.device()
+    );
   }
 }

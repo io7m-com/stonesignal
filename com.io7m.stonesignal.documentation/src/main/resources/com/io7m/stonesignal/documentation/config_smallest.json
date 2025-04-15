@@ -5,12 +5,12 @@
     "OwnerRole": "stonesignal_owner",
     "OwnerPassword": "exampleownerpassword",
     "WorkerPassword": "exampleworkerpassword",
+    "ReaderPassword": "examplereaderpassword",
+    "DevicePassword": "exampledevicepassword",
     "Address": "db.example.com",
     "Port": 5432,
     "Name": "stonesignal",
-    "Upgrade": true,
-    "MinimumConnections": 1,
-    "MaximumConnections": 10
+    "Upgrade": true
   },
   "DeviceAPI": {
     "Host": "localhost",

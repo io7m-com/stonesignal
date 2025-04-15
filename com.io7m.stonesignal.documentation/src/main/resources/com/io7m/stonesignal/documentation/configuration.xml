@@ -78,20 +78,12 @@
       <Paragraph>
         The <Term type="expression">ReaderRolePassword</Term> property specifies the password of the
         <Link target="5d456422-0afa-4faf-9299-38669b5a3444">reader</Link>
-        role used for read-only database access. If this property is not specified, logging in using this role will be
-        prevented.
+        role used for read-only database access.
       </Paragraph>
       <Paragraph>
-        The <Term type="expression">MinimumPoolConnections</Term> property specifies the number of database
-        connections to keep idle in the internal database connection pool. If this property is not specified,
-        the default is <Term type="expression">0</Term>.
-      </Paragraph>
-      <Paragraph>
-        The <Term type="expression">MaximumPoolConnections</Term> property specifies the maximum number of database
-        connections to allow in the internal database connection pool. If this property is not specified,
-        the default is <Term type="expression">10</Term>. If the number of connections in the internal database
-        pool reaches this value, the application will be forced to wait for a connection to become idle before it
-        can obtain a new connection.
+        The <Term type="expression">DeviceRolePassword</Term> property specifies the password of the
+        <Link target="3241a4f8-f8c5-48d4-ad24-20d4ae2e2749">device</Link>
+        role.
       </Paragraph>
       <Paragraph>
         The <Term type="expression">Name</Term> property specifies the database name.
@@ -112,6 +104,8 @@
   "OwnerRole": "stonesignal_owner",
   "OwnerPassword": "exampleownerpassword",
   "WorkerPassword": "exampleworkerpassword",
+  "ReaderPassword": "examplereaderpassword",
+  "DevicePassword": "exampledevicepassword",
   "Address": "db.example.com",
   "Port": 5432,
   "Name": "stonesignal",
@@ -204,7 +198,7 @@
     </Paragraph>
     <FormalItem title="Configuration Schema">
       <Verbatim>
-        <xi:include href="config.schema.json"
+        <xi:include href="schema-StConfiguration.schema.json"
                     parse="text"/>
       </Verbatim>
     </FormalItem>

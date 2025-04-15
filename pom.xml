@@ -39,7 +39,7 @@
     <!-- io7m dependencies. -->
     <com.io7m.anethum.version>1.1.1</com.io7m.anethum.version>
     <com.io7m.canonmill.version>2.1.0</com.io7m.canonmill.version>
-    <com.io7m.darco.version>1.0.0-beta0001</com.io7m.darco.version>
+    <com.io7m.darco.version>3.0.0</com.io7m.darco.version>
     <com.io7m.dixmont.version>2.0.0</com.io7m.dixmont.version>
     <com.io7m.ervilla.version>1.0.0</com.io7m.ervilla.version>
     <com.io7m.jaffirm.version>4.0.1</com.io7m.jaffirm.version>
@@ -192,6 +192,12 @@
         <groupId>com.io7m.quarrel</groupId>
         <artifactId>com.io7m.quarrel.ext.logback</artifactId>
         <version>${com.io7m.quarrel.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.io7m.jxe</groupId>
+        <artifactId>com.io7m.jxe.core</artifactId>
+        <version>2.0.0</version>
       </dependency>
 
       <dependency>

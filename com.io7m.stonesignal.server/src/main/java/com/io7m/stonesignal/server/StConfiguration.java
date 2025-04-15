@@ -83,16 +83,20 @@ public record StConfiguration(
     String ownerRoleName,
 
     @JsonProperty(value = "OwnerPassword", required = true)
-    @JsonPropertyDescription("The database owner password.")
+    @JsonPropertyDescription("The database owner role password.")
     String ownerRolePassword,
 
     @JsonProperty(value = "WorkerPassword", required = true)
-    @JsonPropertyDescription("The database worker password.")
+    @JsonPropertyDescription("The database worker role password.")
     String workerRolePassword,
 
-    @JsonProperty(value = "ReaderPassword")
-    @JsonPropertyDescription("The database reader password.")
-    Optional<String> readerRolePassword,
+    @JsonProperty(value = "ReaderPassword", required = true)
+    @JsonPropertyDescription("The database reader role password.")
+    String readerRolePassword,
+
+    @JsonProperty(value = "DevicePassword", required = true)
+    @JsonPropertyDescription("The database device role password.")
+    String deviceRolePassword,
 
     @JsonProperty(value = "Address", required = true)
     @JsonPropertyDescription("The database address.")
@@ -108,15 +112,7 @@ public record StConfiguration(
 
     @JsonProperty(value = "Upgrade", required = true)
     @JsonPropertyDescription("Upgrade the database?")
-    boolean upgrade,
-
-    @JsonProperty(value = "MinimumConnections", required = true)
-    @JsonPropertyDescription("The minimum connections for pooling.")
-    int minimumConnections,
-
-    @JsonProperty(value = "MaximumConnections", required = true)
-    @JsonPropertyDescription("The maximum connections for pooling.")
-    int maximumConnections)
+    boolean upgrade)
   {
     public Database
     {

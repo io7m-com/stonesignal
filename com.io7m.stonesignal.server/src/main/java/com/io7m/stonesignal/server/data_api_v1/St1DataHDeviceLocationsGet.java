@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.io7m.stonesignal.server.database.StDatabaseRoles.reader;
+
 /**
  * device-locations
  */
@@ -61,7 +63,7 @@ public final class St1DataHDeviceLocationsGet
     this.read(request, St1DataDevicesGet.class);
 
     final Map<UUID, StDeviceLocation> locations;
-    try (final var t = this.database.openTransaction()) {
+    try (final var t = this.database.openTransactionWithRole(reader())) {
       final var p = t.query(StDBDeviceLocationsGetType.class);
       locations = p.execute(DDatabaseUnit.UNIT);
     } catch (final DDatabaseException e) {

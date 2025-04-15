@@ -21,10 +21,11 @@ import com.io7m.stonesignal.server.devices.StDevice;
 import com.io7m.stonesignal.server.devices.StDeviceKey;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
+import org.jooq.SelectSelectStep;
+import org.jooq.impl.DSL;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.io7m.stonesignal.server.database.internal.Tables.DEVICES;
 
@@ -33,7 +34,7 @@ import static com.io7m.stonesignal.server.database.internal.Tables.DEVICES;
  */
 
 public final class StDBDeviceGetByID
-  extends StDatabaseQueryAbstract<UUID, Optional<StDevice>>
+  extends StDatabaseQueryAbstract<StDBDeviceGetByIDParameters, Optional<StDevice>>
   implements StDBDeviceGetByIDType
 {
   StDBDeviceGetByID(final StDatabaseTransactionType t)
@@ -46,7 +47,7 @@ public final class StDBDeviceGetByID
    */
 
   public static StDatabaseQueryProviderType<
-    UUID, Optional<StDevice>, StDBDeviceGetByIDType>
+    StDBDeviceGetByIDParameters, Optional<StDevice>, StDBDeviceGetByIDType>
   provider()
   {
     return StDatabaseQueryProvider.provide(
@@ -59,20 +60,34 @@ public final class StDBDeviceGetByID
   protected Optional<StDevice> onExecuteWithContext(
     final StDatabaseTransactionType transaction,
     final DSLContext context,
-    final UUID device)
+    final StDBDeviceGetByIDParameters device)
     throws Exception
   {
     this.record("DeviceID", device);
 
-    final var opt =
-      context.select(
+    final SelectSelectStep<?> baseSelect;
+    if (device.includeKey()) {
+      baseSelect =
+        context.select(
           DEVICES.DEVICE_ID,
           DEVICES.DEVICE_KEY,
           DEVICES.DEVICE_METADATA,
           DEVICES.DEVICE_NAME
-        ).from(DEVICES)
+        );
+    } else {
+      baseSelect =
+        context.select(
+          DEVICES.DEVICE_ID,
+          DSL.inline(StDeviceKey.redactedKey().key()).as(DEVICES.DEVICE_KEY),
+          DEVICES.DEVICE_METADATA,
+          DEVICES.DEVICE_NAME
+        );
+    }
+
+    final var opt =
+      baseSelect.from(DEVICES)
         .where(
-          DEVICES.DEVICE_ID.eq(device)
+          DEVICES.DEVICE_ID.eq(device.deviceId())
             .and(DEVICES.DEVICE_DELETED.eq(false)))
         .fetchOptional();
 

@@ -54,19 +54,13 @@
           "type" : "string",
           "description" : "The database address."
         },
+        "DevicePassword" : {
+          "type" : "string",
+          "description" : "The database device role password."
+        },
         "Kind" : {
           "$ref" : "#/$defs/DatabaseKind",
           "description" : "The database kind."
-        },
-        "MaximumConnections" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The maximum connections for pooling."
-        },
-        "MinimumConnections" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The minimum connections for pooling."
         },
         "Name" : {
           "type" : "string",
@@ -74,7 +68,7 @@
         },
         "OwnerPassword" : {
           "type" : "string",
-          "description" : "The database owner password."
+          "description" : "The database owner role password."
         },
         "OwnerRole" : {
           "type" : "string",
@@ -86,8 +80,8 @@
           "description" : "The database port."
         },
         "ReaderPassword" : {
-          "type" : [ "string", "null" ],
-          "description" : "The database reader password."
+          "type" : "string",
+          "description" : "The database reader role password."
         },
         "Upgrade" : {
           "type" : "boolean",
@@ -95,10 +89,10 @@
         },
         "WorkerPassword" : {
           "type" : "string",
-          "description" : "The database worker password."
+          "description" : "The database worker role password."
         }
       },
-      "required" : [ "Address", "Kind", "MaximumConnections", "MinimumConnections", "Name", "OwnerPassword", "OwnerRole", "Port", "Upgrade", "WorkerPassword" ]
+      "required" : [ "Address", "DevicePassword", "Kind", "Name", "OwnerPassword", "OwnerRole", "Port", "ReaderPassword", "Upgrade", "WorkerPassword" ]
     },
     "DatabaseKind" : {
       "type" : "string",

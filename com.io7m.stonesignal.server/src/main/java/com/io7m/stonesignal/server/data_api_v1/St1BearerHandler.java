@@ -217,10 +217,20 @@ abstract class St1BearerHandler implements Handler
     final DDatabaseException exception,
     final ServerResponse response)
   {
+    setStatusIfNecessary(response);
+
     this.send(
       response,
       new St1DataError(exception.errorCode(), exception.getMessage())
     );
+  }
+
+  private static void setStatusIfNecessary(
+    final ServerResponse response)
+  {
+    if (response.status().code() < 400) {
+      response.status(500);
+    }
   }
 
   private void sendErrorHTTP(
@@ -243,6 +253,7 @@ abstract class St1BearerHandler implements Handler
     final var message =
       Objects.requireNonNullElse(exception.getMessage(), "I/O error");
 
+    setStatusIfNecessary(response);
     this.send(response, new St1DataError("error-general", message));
   }
 

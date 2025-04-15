@@ -51,6 +51,7 @@ module com.io7m.stonesignal.server
   requires com.io7m.darco.postgres;
   requires com.io7m.dixmont.core;
   requires com.io7m.jmulticlose.core;
+  requires com.io7m.jxe.core;
   requires com.io7m.lanark.core;
   requires com.io7m.quarrel.core;
   requires com.io7m.quarrel.ext.logback;
@@ -73,6 +74,7 @@ module com.io7m.stonesignal.server
   requires org.jooq;
   requires org.postgresql.jdbc;
   requires org.slf4j;
+  requires org.apache.commons.text;
 
   exports com.io7m.stonesignal.server.audit;
   exports com.io7m.stonesignal.server.devices;

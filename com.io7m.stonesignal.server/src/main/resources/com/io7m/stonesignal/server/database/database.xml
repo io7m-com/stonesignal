@@ -16,6 +16,31 @@ CREATE ROLE stonesignal with nosuperuser nocreatedb nocreaterole noinherit nolog
 ]]></Statement>
 
     <Comment>
+      The stonesignal_reader role is a read-only role. The role is initially
+      set to "nologin" as a password will be assigned later and logins enabled.
+    </Comment>
+
+    <Statement><![CDATA[
+DROP ROLE IF EXISTS stonesignal_reader;
+]]></Statement>
+    <Statement><![CDATA[
+CREATE ROLE stonesignal_reader with nosuperuser nocreatedb nocreaterole noinherit nologin;
+]]></Statement>
+
+    <Comment>
+      The stonesignal_device role is the role used for operations performed on behalf of
+      devices. The role is initially set to "nologin" as a password will be assigned later
+      and logins enabled.
+    </Comment>
+
+    <Statement><![CDATA[
+DROP ROLE IF EXISTS stonesignal_device;
+]]></Statement>
+    <Statement><![CDATA[
+CREATE ROLE stonesignal_device with nosuperuser nocreatedb nocreaterole noinherit nologin;
+]]></Statement>
+
+    <Comment>
       The stonesignal_none role is a no-privilege role that cannot perform any
       actions.
     </Comment>
@@ -72,6 +97,9 @@ CREATE TABLE devices (
     <Statement><![CDATA[
 GRANT INSERT, UPDATE, SELECT, DELETE ON devices TO stonesignal
 ]]></Statement>
+    <Statement><![CDATA[
+GRANT SELECT (device_id, device_name, device_metadata, device_deleted) ON devices TO stonesignal_reader
+]]></Statement>
 
     <Statement><![CDATA[
 CREATE TABLE device_location_updates (
@@ -90,6 +118,12 @@ CREATE TABLE device_location_updates (
 
     <Statement><![CDATA[
 GRANT INSERT, SELECT ON device_location_updates TO stonesignal
+]]></Statement>
+    <Statement><![CDATA[
+GRANT SELECT ON device_location_updates TO stonesignal_reader
+]]></Statement>
+    <Statement><![CDATA[
+GRANT INSERT ON device_location_updates TO stonesignal_device
 ]]></Statement>
 
     <Statement><![CDATA[

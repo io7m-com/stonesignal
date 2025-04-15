@@ -96,13 +96,12 @@ public class StServerAdminTest
         "postgresql",
         "12345678",
         "12345678",
-        Optional.empty(),
+        "12345678",
+        "12345678",
         "localhost",
         POSTGRES_FIXTURE.port(),
         "stonesignal",
-        true,
-        1,
-        10
+        true
       );
 
     final var publicAPI =

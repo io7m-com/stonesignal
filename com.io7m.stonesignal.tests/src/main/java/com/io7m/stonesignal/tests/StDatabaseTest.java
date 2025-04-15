@@ -27,6 +27,7 @@ import com.io7m.ervilla.test_extension.ErvillaExtension;
 import com.io7m.stonesignal.server.StConfiguration;
 import com.io7m.stonesignal.server.database.StDBAuditSearchParameters;
 import com.io7m.stonesignal.server.database.StDBAuditSearchType;
+import com.io7m.stonesignal.server.database.StDBDeviceGetByIDParameters;
 import com.io7m.stonesignal.server.database.StDBDeviceGetByIDType;
 import com.io7m.stonesignal.server.database.StDBDeviceGetByKeyType;
 import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdatePutType;
@@ -90,13 +91,12 @@ public class StDatabaseTest
         "postgresql",
         "12345678",
         "12345678",
-        Optional.empty(),
+        "12345678",
+        "12345678",
         "localhost",
         POSTGRES_FIXTURE.port(),
         "stonesignal",
-        true,
-        1,
-        10
+        true
       );
 
     final var deviceAPI =
@@ -174,11 +174,19 @@ public class StDatabaseTest
       assertEquals(
         deviceBefore,
         get0.execute(deviceBefore.key()).orElseThrow());
-      assertEquals(deviceBefore, get1.execute(deviceBefore.id()).orElseThrow());
+      assertEquals(
+        deviceBefore,
+        get1.execute(new StDBDeviceGetByIDParameters(deviceBefore.id(), true)).orElseThrow());
       p.execute(deviceAfter);
       t.commit();
-      assertEquals(deviceAfter, get0.execute(deviceAfter.key()).orElseThrow());
-      assertEquals(deviceAfter, get1.execute(deviceAfter.id()).orElseThrow());
+      assertEquals(
+        deviceAfter,
+        get0.execute(deviceAfter.key()).orElseThrow()
+      );
+      assertEquals(
+        deviceAfter,
+        get1.execute(new StDBDeviceGetByIDParameters(deviceAfter.id(), true)).orElseThrow()
+      );
 
       assertEquals(
         Optional.empty(),
@@ -186,7 +194,7 @@ public class StDatabaseTest
       );
       assertEquals(
         Optional.empty(),
-        get1.execute(UUID.randomUUID())
+        get1.execute(new StDBDeviceGetByIDParameters(UUID.randomUUID(), false))
       );
     }
 

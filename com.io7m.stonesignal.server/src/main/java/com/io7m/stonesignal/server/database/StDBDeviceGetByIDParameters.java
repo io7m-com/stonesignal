@@ -14,20 +14,31 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-
 package com.io7m.stonesignal.server.database;
 
-import com.io7m.darco.api.DDatabaseQueryType;
-import com.io7m.stonesignal.server.devices.StDevice;
-
-import java.util.Optional;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
- * device-get-by-id
+ * device-get-by-id parameters.
+ *
+ * @param deviceId   The device ID
+ * @param includeKey Whether to include the key
  */
 
-public interface StDBDeviceGetByIDType
-  extends DDatabaseQueryType<StDBDeviceGetByIDParameters, Optional<StDevice>>
+public record StDBDeviceGetByIDParameters(
+  UUID deviceId,
+  boolean includeKey)
 {
+  /**
+   * device-get-by-id parameters.
+   *
+   * @param deviceId   The device ID
+   * @param includeKey Whether to include the key
+   */
 
+  public StDBDeviceGetByIDParameters
+  {
+    Objects.requireNonNull(deviceId, "deviceId");
+  }
 }

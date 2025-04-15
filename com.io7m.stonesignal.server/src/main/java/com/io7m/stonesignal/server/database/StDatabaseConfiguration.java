@@ -20,11 +20,15 @@ package com.io7m.stonesignal.server.database;
 import com.io7m.darco.api.DDatabaseCreate;
 import com.io7m.darco.api.DDatabaseTelemetryType;
 import com.io7m.darco.api.DDatabaseUpgrade;
+import com.io7m.darco.api.DRoles;
 import com.io7m.darco.api.DUsernamePassword;
 import com.io7m.darco.postgres.DPQDatabaseConfigurationType;
+import com.io7m.jxe.core.JXEHardenedSAXParsers;
 import com.io7m.stonesignal.server.StConfiguration;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * The database configuration.
@@ -52,6 +56,12 @@ public record StDatabaseConfiguration(
   }
 
   @Override
+  public Optional<JXEHardenedSAXParsers> saxParsers()
+  {
+    return Optional.empty();
+  }
+
+  @Override
   public DDatabaseCreate create()
   {
     return DDatabaseCreate.DO_NOT_CREATE_DATABASE;
@@ -65,6 +75,19 @@ public record StDatabaseConfiguration(
     } else {
       return DDatabaseUpgrade.DO_NOT_UPGRADE_DATABASE;
     }
+  }
+
+  @Override
+  public DRoles roles()
+  {
+    return DRoles.of(
+      List.of(
+        this.workerRole(),
+        this.ownerRole(),
+        this.readerRole(),
+        this.deviceRole()
+      )
+    );
   }
 
   @Override
@@ -101,11 +124,41 @@ public record StDatabaseConfiguration(
   }
 
   @Override
+  public DUsernamePassword defaultRole()
+  {
+    return this.workerRole();
+  }
+
+  @Override
   public DUsernamePassword workerRole()
   {
     return new DUsernamePassword(
       "stonesignal",
       this.configuration.database().workerRolePassword()
+    );
+  }
+
+  /**
+   * @return The reader role
+   */
+
+  public DUsernamePassword readerRole()
+  {
+    return new DUsernamePassword(
+      "stonesignal_reader",
+      this.configuration.database().readerRolePassword()
+    );
+  }
+
+  /**
+   * @return The device role
+   */
+
+  public DUsernamePassword deviceRole()
+  {
+    return new DUsernamePassword(
+      "stonesignal_device",
+      this.configuration.database().deviceRolePassword()
     );
   }
 }

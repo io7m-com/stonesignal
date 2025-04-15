@@ -15,19 +15,16 @@
  */
 
 
-package com.io7m.stonesignal.server.database;
+package com.io7m.stonesignal.tests;
 
-import com.io7m.darco.api.DDatabaseQueryType;
-import com.io7m.stonesignal.server.devices.StDevice;
+import com.io7m.stonesignal.server.devices.StDeviceKey;
+import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
-/**
- * device-get-by-id
- */
-
-public interface StDBDeviceGetByIDType
-  extends DDatabaseQueryType<StDBDeviceGetByIDParameters, Optional<StDevice>>
+public final class StDeviceKeyTest
 {
-
+  @Test
+  public void testRedacted()
+  {
+    StDeviceKey.redactedKey();
+  }
 }

@@ -23,6 +23,7 @@ import com.io7m.stonesignal.protocol.device.v1.St1DeviceLocationUpdate;
 import com.io7m.stonesignal.protocol.device.v1.St1DeviceOK;
 import com.io7m.stonesignal.server.clock.StServerClock;
 import com.io7m.stonesignal.server.database.StDBDeviceLocationUpdatePutType;
+import com.io7m.stonesignal.server.database.StDatabaseRoles;
 import com.io7m.stonesignal.server.database.StDatabaseType;
 import com.io7m.stonesignal.server.devices.StDeviceLocation;
 import io.helidon.http.Status;
@@ -72,7 +73,7 @@ public final class St1DeviceLocationPut
       throw e;
     }
 
-    try (final var t = this.database.openTransaction()) {
+    try (final var t = this.database.openTransactionWithRole(StDatabaseRoles.device())) {
       final var p = t.query(StDBDeviceLocationUpdatePutType.class);
       p.execute(new StDeviceLocation(
         0L,

@@ -25,6 +25,7 @@ import com.github.victools.jsonschema.generator.SchemaGenerator;
 import com.github.victools.jsonschema.generator.SchemaGeneratorConfigBuilder;
 import com.github.victools.jsonschema.generator.SchemaVersion;
 import com.github.victools.jsonschema.module.jackson.JacksonModule;
+import com.io7m.stonesignal.server.StConfiguration;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -91,6 +92,7 @@ public final class SchemaGeneration
         .build();
 
     final var classes = Set.of(
+      StConfiguration.class,
       com.io7m.stonesignal.protocol.admin.v1.St1AdminDevice.class,
       com.io7m.stonesignal.protocol.admin.v1.St1AdminDeviceGetByID.class,
       com.io7m.stonesignal.protocol.admin.v1.St1AdminDeviceGetByKey.class,

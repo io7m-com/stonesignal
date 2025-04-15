@@ -32,6 +32,8 @@ import io.helidon.webserver.http.ServerResponse;
 
 import java.util.List;
 
+import static com.io7m.stonesignal.server.database.StDatabaseRoles.reader;
+
 /**
  * device-location-history
  */
@@ -60,7 +62,7 @@ public final class St1DataHDeviceLocationHistory
       this.read(request, St1DataDeviceLocationHistoryGet.class);
 
     final List<StDeviceLocation> locations;
-    try (final var t = this.database.openTransaction()) {
+    try (final var t = this.database.openTransactionWithRole(reader())) {
       final var p = t.query(StDBDeviceLocationUpdateSearchType.class);
       locations = p.execute(
         new StDBDeviceLocationUpdateSearchParameters(

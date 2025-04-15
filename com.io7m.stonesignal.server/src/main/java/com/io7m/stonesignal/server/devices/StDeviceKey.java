@@ -39,6 +39,9 @@ public record StDeviceKey(
   public static final Pattern VALID_KEY =
     Pattern.compile("[A-F0-9]{64}");
 
+  private static final StDeviceKey REDACTED_KEY =
+    new StDeviceKey("F".repeat(64));
+
   /**
    * A device key.
    *
@@ -71,5 +74,14 @@ public record StDeviceKey(
         .formatHex(key)
         .toUpperCase(Locale.ROOT)
     );
+  }
+
+  /**
+   * @return A redacted key
+   */
+
+  public static StDeviceKey redactedKey()
+  {
+    return REDACTED_KEY;
   }
 }
