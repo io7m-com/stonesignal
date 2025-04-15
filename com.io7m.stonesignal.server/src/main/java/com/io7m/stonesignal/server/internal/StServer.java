@@ -41,6 +41,7 @@ import com.io7m.stonesignal.server.telemetry.StTelemetryServiceFactoryType;
 import com.io7m.stonesignal.server.telemetry.StTelemetryServiceType;
 import com.io7m.stonesignal.server.tls.StTLSContextService;
 import com.io7m.stonesignal.server.tls.StTLSContextServiceType;
+import com.io7m.stonesignal.server.tls.StTLSReloader;
 import io.opentelemetry.api.trace.SpanKind;
 
 import java.time.Clock;
@@ -171,6 +172,7 @@ public final class StServer implements StServerType
 
     final var tls = StTLSContextService.createService(services);
     services.register(StTLSContextServiceType.class, tls);
+    services.register(StTLSReloader.class, StTLSReloader.create(tls));
     return services;
   }
 
