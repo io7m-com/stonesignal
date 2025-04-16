@@ -1,0 +1,30 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "Map(String,String)" : {
+      "type" : "object"
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "Data" : {
+      "$ref" : "#/$defs/Map(String,String)",
+      "description" : "The audit event data."
+    },
+    "ID" : {
+      "type" : "integer",
+      "format" : "int64",
+      "description" : "The audit event ID."
+    },
+    "Time" : {
+      "type" : "string",
+      "format" : "date-time",
+      "description" : "The audit event time."
+    },
+    "Type" : {
+      "type" : "string",
+      "description" : "The audit event type."
+    }
+  },
+  "required" : [ "Data", "ID", "Time", "Type" ]
+}

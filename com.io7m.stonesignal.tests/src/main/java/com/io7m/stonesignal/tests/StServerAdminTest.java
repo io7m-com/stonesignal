@@ -22,6 +22,8 @@ import com.io7m.ervilla.api.EContainerSupervisorType;
 import com.io7m.ervilla.test_extension.ErvillaCloseAfterSuite;
 import com.io7m.ervilla.test_extension.ErvillaConfiguration;
 import com.io7m.ervilla.test_extension.ErvillaExtension;
+import com.io7m.stonesignal.protocol.admin.v1.St1AdminAuditGet;
+import com.io7m.stonesignal.protocol.admin.v1.St1AdminAuditGetResponse;
 import com.io7m.stonesignal.protocol.admin.v1.St1AdminDevice;
 import com.io7m.stonesignal.protocol.admin.v1.St1AdminDeviceGetByID;
 import com.io7m.stonesignal.protocol.admin.v1.St1AdminDeviceGetByKey;
@@ -53,11 +55,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Clock;
+import java.time.OffsetDateTime;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith({ErvillaExtension.class, ZeladorExtension.class})
 @ErvillaConfiguration(projectName = "com.io7m.stonesignal", disabledIfUnsupported = true)
@@ -774,18 +779,18 @@ public class StServerAdminTest
     throws Exception
   {
     final var text = """
-{
-  "Device": {
-    "DeviceID": "f057fc17-07ef-4b89-8aa1-004eb992a364",
-    "DeviceKey": "ACCD3D5D5C3864083E371BD1E161C6071C3A847943CCCA6A833CECC1FA67D30C",
-    "Name": "Fake",
-    "Metadata": {
-      "Manufacturer": 23,
-      "What?": {}
-    }
-  }
-}
-      """;
+      {
+        "Device": {
+          "DeviceID": "f057fc17-07ef-4b89-8aa1-004eb992a364",
+          "DeviceKey": "ACCD3D5D5C3864083E371BD1E161C6071C3A847943CCCA6A833CECC1FA67D30C",
+          "Name": "Fake",
+          "Metadata": {
+            "Manufacturer": 23,
+            "What?": {}
+          }
+        }
+      }
+            """;
 
     try (final var client = HttpClient.newHttpClient()) {
       final var request =
@@ -802,4 +807,165 @@ public class StServerAdminTest
       assertEquals(400, r.statusCode());
     }
   }
+
+  @Test
+  public void testAdminAuditGetJSON()
+    throws Exception
+  {
+    final var mapper =
+      St1AdminProtocolMapperJSON.get();
+
+    try (final var client = HttpClient.newHttpClient()) {
+      for (int index = 0; index < 10; ++index) {
+        final var device =
+          new StDevice(
+            UUID.randomUUID(),
+            StDeviceKey.random(),
+            "Device0",
+            Map.ofEntries(
+              Map.entry("x", "y"),
+              Map.entry("a", "b")
+            ));
+
+        final var request =
+          HttpRequest.newBuilder(
+              URI.create("http://localhost:10001/1/0/device-put"))
+            .header(
+              "Authorization",
+              "Bearer " + this.configuration.adminAPI().apiKey())
+            .POST(HttpRequest.BodyPublishers.ofString(
+              mapper.writeValueAsString(
+                new St1AdminDevicePut(
+                  new St1AdminDevice(
+                    device.id(),
+                    device.key().key(),
+                    device.name(),
+                    device.metadata()
+                  )
+                )
+              )
+            ))
+            .build();
+
+        final var r = client.send(request, BodyHandlers.ofString());
+        LOG.debug("Got: {}: {}", r.statusCode(), r.body());
+        assertEquals(200, r.statusCode());
+      }
+
+      {
+        final var request =
+          HttpRequest.newBuilder(
+              URI.create("http://localhost:10001/1/0/audit-get"))
+            .header(
+              "Authorization",
+              "Bearer " + this.configuration.adminAPI().apiKey())
+            .POST(HttpRequest.BodyPublishers.ofString(
+              mapper.writeValueAsString(
+                new St1AdminAuditGet(
+                  OffsetDateTime.now().minusHours(1L),
+                  Optional.empty(),
+                  1000
+                )
+              )
+            ))
+            .build();
+
+        final var r = client.send(request, BodyHandlers.ofString());
+        LOG.debug("Got: {}: {}", r.statusCode(), r.body());
+        assertEquals(200, r.statusCode());
+
+        final var received =
+          mapper.readValue(r.body(), St1AdminAuditGetResponse.class);
+        assertEquals(10, received.events().size());
+        assertTrue(
+          received.events()
+            .stream()
+            .allMatch(e -> {
+              return Objects.equals(e.type(), "DeviceUpdated");
+            }));
+      }
+    }
+  }
+
+  @Test
+  public void testAdminAuditGetCBOR()
+    throws Exception
+  {
+    final var mapper =
+      St1AdminProtocolMapperCBOR.get();
+
+    try (final var client = HttpClient.newHttpClient()) {
+      for (int index = 0; index < 10; ++index) {
+        final var device =
+          new StDevice(
+            UUID.randomUUID(),
+            StDeviceKey.random(),
+            "Device " + index,
+            Map.ofEntries(
+              Map.entry("x", "y"),
+              Map.entry("a", "b")
+            ));
+
+        final var request =
+          HttpRequest.newBuilder(
+              URI.create("http://localhost:10001/1/0/device-put"))
+            .header("Content-Type", "application/stonesignal+cbor")
+            .header(
+              "Authorization",
+              "Bearer " + this.configuration.adminAPI().apiKey())
+            .POST(HttpRequest.BodyPublishers.ofByteArray(
+              mapper.writeValueAsBytes(
+                new St1AdminDevicePut(
+                  new St1AdminDevice(
+                    device.id(),
+                    device.key().key(),
+                    device.name(),
+                    device.metadata()
+                  )
+                )
+              )
+            ))
+            .build();
+
+        final var r = client.send(request, BodyHandlers.ofByteArray());
+        LOG.debug("Got: {}: {}", r.statusCode(), r.body());
+        assertEquals(200, r.statusCode());
+      }
+
+      {
+        final var request =
+          HttpRequest.newBuilder(
+              URI.create("http://localhost:10001/1/0/audit-get"))
+            .header("Content-Type", "application/stonesignal+cbor")
+            .header(
+              "Authorization",
+              "Bearer " + this.configuration.adminAPI().apiKey())
+            .POST(HttpRequest.BodyPublishers.ofByteArray(
+              mapper.writeValueAsBytes(
+                new St1AdminAuditGet(
+                  OffsetDateTime.now().minusHours(1L),
+                  Optional.empty(),
+                  1000
+                )
+              )
+            ))
+            .build();
+
+        final var r = client.send(request, BodyHandlers.ofByteArray());
+        LOG.debug("Got: {}: {}", r.statusCode(), r.body());
+        assertEquals(200, r.statusCode());
+
+        final var received =
+          mapper.readValue(r.body(), St1AdminAuditGetResponse.class);
+        assertEquals(10, received.events().size());
+        assertTrue(
+          received.events()
+            .stream()
+            .allMatch(e -> {
+              return Objects.equals(e.type(), "DeviceUpdated");
+            }));
+      }
+    }
+  }
+
 }

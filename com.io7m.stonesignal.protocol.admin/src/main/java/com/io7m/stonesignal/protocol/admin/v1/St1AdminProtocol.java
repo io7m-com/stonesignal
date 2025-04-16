@@ -41,7 +41,8 @@ public final class St1AdminProtocol
   {
     return Stream.concat(
       Stream.of(
-        "java.util.Map<java.lang.String,java.lang.String>"
+        "java.util.Map<java.lang.String,java.lang.String>",
+        "java.util.List<com.io7m.stonesignal.protocol.admin.v1.St1AuditEvent>"
       ),
       classes()
         .stream()
@@ -56,6 +57,8 @@ public final class St1AdminProtocol
   private static Set<Class<?>> classes()
   {
     return Set.of(
+      St1AdminAuditGet.class,
+      St1AdminAuditGetResponse.class,
       St1AdminDevice.class,
       St1AdminDeviceGetByID.class,
       St1AdminDeviceGetByKey.class,
@@ -64,9 +67,11 @@ public final class St1AdminProtocol
       St1AdminError.class,
       St1AdminMessageType.class,
       St1AdminOK.class,
+      St1AuditEvent.class,
       String.class,
       UUID.class,
-      int.class
+      int.class,
+      long.class
     );
   }
 }

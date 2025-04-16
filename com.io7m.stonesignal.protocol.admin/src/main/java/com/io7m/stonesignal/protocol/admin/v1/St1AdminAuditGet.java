@@ -14,26 +14,43 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
 package com.io7m.stonesignal.protocol.admin.v1;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.time.OffsetDateTime;
+import java.util.Objects;
+import java.util.Optional;
+
 /**
- * The type of device protocol messages.
+ * Get audit events.
  */
+
+// CHECKSTYLE:OFF
 
 @JsonSerialize
 @JsonDeserialize
-public sealed interface St1AdminMessageType
-  permits St1AdminAuditGet,
-  St1AdminAuditGetResponse,
-  St1AdminDeviceGetByID,
-  St1AdminDeviceGetByKey,
-  St1AdminDeviceGetResponse,
-  St1AdminDevicePut,
-  St1AdminError,
-  St1AdminOK
-{
+public record St1AdminAuditGet(
+  @JsonProperty(value = "TimeStart", required = true)
+  @JsonPropertyDescription("The start time.")
+  OffsetDateTime timeStart,
 
+  @JsonProperty(value = "Type")
+  @JsonPropertyDescription("The event type to include.")
+  Optional<String> type,
+
+  @JsonProperty(value = "Count", required = true)
+  @JsonPropertyDescription("The maximum number of events to return.")
+  int count)
+  implements St1AdminMessageType
+{
+  public St1AdminAuditGet
+  {
+    Objects.requireNonNull(type, "type");
+    Objects.requireNonNull(timeStart, "timeStart");
+  }
 }

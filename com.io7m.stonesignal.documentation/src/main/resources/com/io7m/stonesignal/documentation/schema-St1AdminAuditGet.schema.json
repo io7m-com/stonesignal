@@ -1,0 +1,21 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "properties" : {
+    "Count" : {
+      "type" : "integer",
+      "format" : "int32",
+      "description" : "The maximum number of events to return."
+    },
+    "TimeStart" : {
+      "type" : "string",
+      "format" : "date-time",
+      "description" : "The start time."
+    },
+    "Type" : {
+      "type" : [ "string", "null" ],
+      "description" : "The event type to include."
+    }
+  },
+  "required" : [ "Count", "TimeStart" ]
+}

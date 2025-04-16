@@ -14,26 +14,32 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
 package com.io7m.stonesignal.protocol.admin.v1;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.util.List;
+
 /**
- * The type of device protocol messages.
+ * The response to getting audit events.
  */
+
+// CHECKSTYLE:OFF
 
 @JsonSerialize
 @JsonDeserialize
-public sealed interface St1AdminMessageType
-  permits St1AdminAuditGet,
-  St1AdminAuditGetResponse,
-  St1AdminDeviceGetByID,
-  St1AdminDeviceGetByKey,
-  St1AdminDeviceGetResponse,
-  St1AdminDevicePut,
-  St1AdminError,
-  St1AdminOK
+public record St1AdminAuditGetResponse(
+  @JsonProperty("Events")
+  @JsonPropertyDescription("The events.")
+  List<St1AuditEvent> events)
+  implements St1AdminMessageType
 {
-
+  public St1AdminAuditGetResponse
+  {
+    events = List.copyOf(events);
+  }
 }

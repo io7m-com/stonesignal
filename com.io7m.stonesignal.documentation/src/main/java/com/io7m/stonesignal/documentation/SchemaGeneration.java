@@ -93,6 +93,9 @@ public final class SchemaGeneration
 
     final var classes = Set.of(
       StConfiguration.class,
+      com.io7m.stonesignal.protocol.admin.v1.St1AdminAuditGetResponse.class,
+      com.io7m.stonesignal.protocol.admin.v1.St1AdminAuditGet.class,
+      com.io7m.stonesignal.protocol.admin.v1.St1AuditEvent.class,
       com.io7m.stonesignal.protocol.admin.v1.St1AdminDevice.class,
       com.io7m.stonesignal.protocol.admin.v1.St1AdminDeviceGetByID.class,
       com.io7m.stonesignal.protocol.admin.v1.St1AdminDeviceGetByKey.class,

@@ -156,6 +156,60 @@ $ curl -s http://example.com/ | jq
     </Subsection>
   </Subsection>
 
+  <Subsection title="Endpoint: /audit-get" id="78fa230c-6d48-4f6c-93ac-cb73944b6dac">
+    <Subsection title="Description">
+      <Paragraph>
+        The <Term type="endpoint">/audit-get</Term> endpoint is used retrieve events from the
+        audit log.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Request Type">
+      <Paragraph>
+        The endpoint expects requests of the following type:
+      </Paragraph>
+      <FormalItem title="Request Schema">
+        <Verbatim><xi:include href="schema-St1AdminAuditGet.schema.json" parse="text"/></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Response Type">
+      <Paragraph>
+        The endpoint responds with objects of the following type:
+      </Paragraph>
+      <FormalItem title="Response Schema">
+        <Verbatim><xi:include href="schema-St1AdminAuditGetResponse.schema.json" parse="text"/></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Example">
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+$ cat data.json
+{
+  "TimeStart": "2025-04-16T12:57:22+00:00",
+  "Count": 1000
+}
+
+$ curl \
+  --data-binary @data.json \
+  --header 'Content-Type: application/stonesignal+json' \
+  --header 'Authorization: Bearer 6890BF0E202343407CAF3FF100A118BDBB1BECABE343F3480E9A3DB0D9C889DC' \
+  http://example.com/1/0/audit-get
+{
+  "Events": [
+    {
+      "ID": 23,
+      "Time": "2025-04-16T12:57:22+00:00",
+      "Type": "DeviceUpdated",
+      "Data": {
+        ...
+      }
+    }
+  ]
+}
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
   <Subsection title="Endpoint: /device-get-by-id" id="94dfe20c-abf7-4acd-8d1b-1f580b434e66">
     <Subsection title="Description">
       <Paragraph>

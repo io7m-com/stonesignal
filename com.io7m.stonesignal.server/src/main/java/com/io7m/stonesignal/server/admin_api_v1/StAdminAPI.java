@@ -114,6 +114,15 @@ public final class StAdminAPI
     );
 
     routingBuilder.get(
+      "/1/0/audit-get",
+      new St1AdminHAuditGet(services)
+    );
+    routingBuilder.post(
+      "/1/0/audit-get",
+      new St1AdminHAuditGet(services)
+    );
+
+    routingBuilder.get(
       "/",
       new StVersions(services, 200)
     );
