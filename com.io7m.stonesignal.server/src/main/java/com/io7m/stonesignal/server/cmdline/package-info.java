@@ -18,7 +18,7 @@
  * Position recorder (Command-line)
  */
 
-@Version("1.0.0")
+@Version("1.0.1")
 package com.io7m.stonesignal.server.cmdline;
 
 import org.osgi.annotation.versioning.Version;

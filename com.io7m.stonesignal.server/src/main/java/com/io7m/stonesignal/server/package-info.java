@@ -19,7 +19,7 @@
  */
 
 @Export
-@Version("1.0.0")
+@Version("1.0.1")
 package com.io7m.stonesignal.server;
 
 import org.osgi.annotation.bundle.Export;

@@ -18,7 +18,7 @@
  * Position recorder (Server [Clock])
  */
 
-@Version("1.0.0")
+@Version("1.0.1")
 package com.io7m.stonesignal.server.clock;
 
 import org.osgi.annotation.versioning.Version;

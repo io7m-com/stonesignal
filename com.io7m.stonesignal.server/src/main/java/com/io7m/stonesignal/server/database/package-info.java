@@ -18,7 +18,7 @@
  * Position recorder (Server [Database])
  */
 
-@Version("1.0.0")
+@Version("1.0.1")
 package com.io7m.stonesignal.server.database;
 
 import org.osgi.annotation.versioning.Version;

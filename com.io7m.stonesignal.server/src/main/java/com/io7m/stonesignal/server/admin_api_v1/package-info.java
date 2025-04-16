@@ -18,7 +18,7 @@
  * Position recorder (Server [Admin API])
  */
 
-@Version("1.0.0")
+@Version("1.0.1")
 package com.io7m.stonesignal.server.admin_api_v1;
 
 import org.osgi.annotation.versioning.Version;

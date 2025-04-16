@@ -18,7 +18,7 @@
  * Position recorder (Server [Configuration])
  */
 
-@Version("1.0.0")
+@Version("1.0.1")
 package com.io7m.stonesignal.server.configuration;
 
 import org.osgi.annotation.versioning.Version;
