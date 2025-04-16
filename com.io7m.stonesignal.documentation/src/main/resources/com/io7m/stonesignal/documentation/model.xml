@@ -56,14 +56,18 @@
   <Subsection title="Admin API"
               id="df108840-ae27-456c-b3c0-da810f385f23">
     <Paragraph>
-      The <Term type="term">admin API</Term> is the interface exposed to administrators.
+      The <Term type="term">admin API</Term> is the interface exposed to administrators. The API allows
+      for enrolling and editing devices.
     </Paragraph>
   </Subsection>
 
   <Subsection title="Data API"
               id="b26bc7fc-ebaa-410f-aa9e-0c074f76c329">
     <Paragraph>
-      The <Term type="term">data API</Term> is the interface exposed to data analysis applications.
+      The <Term type="term">data API</Term> is the interface exposed to data analysis applications. It
+      provides a read-only view of devices and locations, but it deliberately does not have access to
+      secret values such as
+      <Link target="ca25266d-71aa-4ad8-8e75-3fe03bb9f8a5">device keys</Link>.
     </Paragraph>
   </Subsection>
 
