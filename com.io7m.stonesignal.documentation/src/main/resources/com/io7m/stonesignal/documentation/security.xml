@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section id="ae6835d4-f58a-4604-93d8-a2abdd61777c"
+         title="Security"
+         xmlns="urn:com.io7m.structural:8:0"
+         xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <Section title="Overview">
+    <Paragraph>
+      This section of the manual attempts to describe the security properties of the
+      <Term type="package">stonesignal</Term> server.
+    </Paragraph>
+  </Section>
+
+  <xi:include href="sec-general.xml"/>
+
+</Section>

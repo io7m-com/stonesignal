@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Document xmlns="urn:com.io7m.structural:8:0"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          tableOfContentsDepth="1">
+
+  <Metadata>
+    <dc:date>2025-04-14T08:56:15+00:00</dc:date>
+    <dc:description>User manual for the stonesignal server.</dc:description>
+    <dc:identifier>e481cb42-6e0a-4c29-881a-914a16b0c400</dc:identifier>
+    <dc:language>en</dc:language>
+    <dc:source>https://www.io7m.com/software/stonesignal/</dc:source>
+    <dc:title>Stonesignal User Manual ${project.version}</dc:title>
+
+    <MetaProperty name="com.io7m.xstructural.epub.colophon">colophon_extra.xml</MetaProperty>
+    <MetaProperty name="com.io7m.xstructural.epub.cover">cover.jpg</MetaProperty>
+    <MetaProperty name="com.io7m.xstructural.web.branding.header">brand.xml</MetaProperty>
+    <MetaProperty name="com.io7m.xstructural.web.branding.footer">brand.xml</MetaProperty>
+  </Metadata>
+
+  <xi:include href="intro.xml"/>
+  <xi:include href="install.xml"/>
+  <xi:include href="configuration.xml"/>
+  <xi:include href="model.xml"/>
+  <xi:include href="monitoring.xml"/>
+  <xi:include href="cmdline.xml"/>
+  <xi:include href="api.xml"/>
+  <xi:include href="security.xml"/>
+
+</Document>

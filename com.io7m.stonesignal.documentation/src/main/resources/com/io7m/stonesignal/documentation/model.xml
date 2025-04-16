@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section xmlns="urn:com.io7m.structural:8:0"
+         id="e7b8d1c0-1329-4bcd-aabb-276d0219593b"
+         title="Model">
+
+  <Subsection title="Overview">
+    <Paragraph>
+      The <Term type="package">stonesignal</Term> package provides a server-based application to record
+      location data sent from devices.
+    </Paragraph>
+    <Paragraph>
+      This section of the documentation describes the internal <Term type="package">stonesignal</Term> model.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Device" id="3fe79da3-4b95-4bf5-aa7c-d5d2580bc5fd">
+    <Subsection title="Overview">
+      <Paragraph>
+        A <Term type="term">device</Term> is a piece of GPS (or other location technology) enabled electronic
+        equipment. In the typical use case, a <Term type="term">device</Term> will be a smartphone.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="ID" id="592a5adc-1ec4-42df-8cb7-1f954e78421a">
+      <Paragraph>
+        Devices are assigned <Term type="term">device IDs</Term>. A <Term type="term">device ID</Term>
+        is a public UUID value that identifies the device.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Key" id="ca25266d-71aa-4ad8-8e75-3fe03bb9f8a5">
+      <Paragraph>
+        Devices are assigned <Term type="term">device keys</Term>. A <Term type="term">device key</Term>
+        is a secret <Term type="constant">32-byte</Term> random value that the device uses to authenticate
+        itself to the <Link target="8527fc4f-5c16-4cf9-bda5-f24ffce783f5">device API</Link>.
+      </Paragraph>
+      <Paragraph>
+        The text encoding for a device key is given by the pattern
+        <Term type="expression">[A-F0-9]{64}</Term>. So, for example,
+        the string
+        <Term type="constant">02210D83680AC0F4A50C47F51DCCE35610DE59717623A0D9408067279A63D511</Term>
+        is a well-formed device key, whilst
+        <Term type="constant">02210d83680ac0f4a50c47f51dcce35610de59717623a0d9408067279a63d511</Term>
+        is not.
+      </Paragraph>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Device API"
+              id="8527fc4f-5c16-4cf9-bda5-f24ffce783f5">
+    <Paragraph>
+      The <Term type="term">device API</Term> is the interface exposed to devices. The device API serves
+      only one purpose: It accepts location updates from devices and records them into the database.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Admin API"
+              id="df108840-ae27-456c-b3c0-da810f385f23">
+    <Paragraph>
+      The <Term type="term">admin API</Term> is the interface exposed to administrators. The API allows
+      for enrolling and editing devices.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Data API"
+              id="b26bc7fc-ebaa-410f-aa9e-0c074f76c329">
+    <Paragraph>
+      The <Term type="term">data API</Term> is the interface exposed to data analysis applications. It
+      provides a read-only view of devices and locations, but it deliberately does not have access to
+      secret values such as
+      <Link target="ca25266d-71aa-4ad8-8e75-3fe03bb9f8a5">device keys</Link>.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Audit Log"
+              id="021fa938-f249-4620-a938-959b308e1d1f">
+    <Paragraph>
+      The server maintains an append-only <Term type="term">audit log</Term> consisting of a series of
+      <Term type="term">audit events</Term>. An <Term type="term">audit event</Term> has an integer
+      <Term type="term">id</Term>, an <Term type="term">owner</Term> (represented by an account UUID),
+      a <Term type="term">timestamp</Term>, a <Term type="term">type</Term>, and a
+      <Term type="term">message</Term>
+      consisting of a set of key/value pairs.
+    </Paragraph>
+    <Paragraph>
+      Each operation that changes the underlying database typically results in an event being logged to the audit log.
+    </Paragraph>
+  </Subsection>
+
+</Section>

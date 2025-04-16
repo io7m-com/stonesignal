@@ -1,0 +1,22 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "properties" : {
+    "Count" : {
+      "type" : "integer",
+      "format" : "int32",
+      "description" : "The maximum number of events to return."
+    },
+    "DeviceID" : {
+      "type" : "string",
+      "format" : "uuid",
+      "description" : "The device ID."
+    },
+    "TimeStart" : {
+      "type" : "string",
+      "format" : "date-time",
+      "description" : "The start time."
+    }
+  },
+  "required" : [ "Count", "DeviceID", "TimeStart" ]
+}

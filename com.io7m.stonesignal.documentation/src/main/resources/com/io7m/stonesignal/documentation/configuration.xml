@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section xmlns="urn:com.io7m.structural:8:0"
+         title="Configuration"
+         id="f1e0e558-035d-4f3c-b1a2-cf3a096044f3"
+         xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <Subsection title="Overview">
+    <Paragraph>
+      The <Term type="package">stonesignal</Term> server is configured using a single JSON-formatted configuration file.
+      The format has a fully documented <Link target="bf9d263d-a279-41bd-bfdf-78f7c3fbf7a9">schema</Link> and so
+      configuration files can be independently validated, and benefit from autocompletion in most modern IDEs.
+    </Paragraph>
+    <Paragraph>
+      Configuration files are allowed to contain line-based <Term type="constant">//</Term> style
+      comments.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Smallest Working Configuration">
+    <Paragraph>
+      The smallest working configuration file, assuming a database at
+      <Term type="expression">db.example.com</Term>:
+    </Paragraph>
+    <FormalItem title="Example">
+      <Verbatim>
+        <xi:include href="config_smallest.json"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
+  </Subsection>
+
+  <Subsection title="DeviceAPI">
+    <Subsection title="Description">
+      <Paragraph>
+        The <Term type="expression">DeviceAPI</Term> section of the configuration file configures the
+        <Link target="8527fc4f-5c16-4cf9-bda5-f24ffce783f5">device API service</Link>.
+      </Paragraph>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="AdminAPI" id="bcbccec0-9d9b-44e8-91d3-02400316c89d">
+    <Subsection title="Description">
+      <Paragraph>
+        The <Term type="expression">AdminAPI</Term> section of the configuration file configures the
+        <Link target="df108840-ae27-456c-b3c0-da810f385f23">admin API service</Link>.
+      </Paragraph>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="DataAPI" id="e32b49e6-486f-4486-bbc4-3da0f7da835f">
+    <Subsection title="Description">
+      <Paragraph>
+        The <Term type="expression">DataAPI</Term> section of the configuration file configures the
+        <Link target="b26bc7fc-ebaa-410f-aa9e-0c074f76c329">data API service</Link>.
+      </Paragraph>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Database">
+    <Subsection title="Overview">
+      <Paragraph>
+        The <Term type="expression">Database</Term> section of the configuration file configures the database.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">OwnerRole</Term> property specifies the name of the role that
+        <Link target="e6639080-328c-4695-a2a0-e155d0c39e0b">owns the database</Link>. Conventionally, this should be
+        <Term type="constant">stonesignal_owner</Term>, but can be set independently by the database administrator.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">OwnerRolePassword</Term> property specifies the password of the owner role.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">WorkerRolePassword</Term> property specifies the password of the
+        <Link target="6c89b8de-d39c-4d32-8e1a-bb23e3c22601">worker</Link>
+        role used for normal database operation.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">ReaderRolePassword</Term> property specifies the password of the
+        <Link target="5d456422-0afa-4faf-9299-38669b5a3444">reader</Link>
+        role used for read-only database access.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">DeviceRolePassword</Term> property specifies the password of the
+        <Link target="3241a4f8-f8c5-48d4-ad24-20d4ae2e2749">device</Link>
+        role.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Name</Term> property specifies the database name.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Upgrade</Term> property specifies that the database schema should be upgraded on
+        startup.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Example">
+      <Paragraph>
+        An example database configuration:
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+"Database": {
+  "Kind": "POSTGRESQL",
+  "OwnerRole": "stonesignal_owner",
+  "OwnerPassword": "exampleownerpassword",
+  "WorkerPassword": "exampleworkerpassword",
+  "ReaderPassword": "examplereaderpassword",
+  "DevicePassword": "exampledevicepassword",
+  "Address": "db.example.com",
+  "Port": 5432,
+  "Name": "stonesignal",
+  "Upgrade": true,
+  "MinimumConnections": 1,
+  "MaximumConnections": 10
+}
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="OpenTelemetry"
+              id="694ad99a-9977-47bf-ae12-85fb7e9a204e">
+    <Subsection title="Overview">
+      <Paragraph>
+        The <Term type="expression">OpenTelemetry</Term> section of the configuration file configures
+        <LinkExternal target="https://opentelemetry.io/">Open Telemetry</LinkExternal>. This section is optional and
+        telemetry is disabled if the section is not present.
+      </Paragraph>
+      <Paragraph>
+        The logical service name should be provided in the
+        <Term type="expression">ServiceName</Term>
+        property.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Traces"
+                id="1e5d55f4-0334-4613-bd0c-8e307de47af7">
+      <Paragraph>
+        If the <Term type="expression">OpenTelemetry</Term> object contains a
+        <Term type="expression">Traces</Term>
+        object, OTLP
+        <LinkExternal target="https://opentelemetry.io/docs/concepts/signals/traces/">traces</LinkExternal>
+        will be sent to a specified endpoint. The <Term type="expression">Endpoint</Term> property specifies the
+        endpoint, and the <Term type="expression">Protocol</Term> property must be <Term type="constant">HTTP</Term>.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Metrics">
+      <Paragraph>
+        If the <Term type="expression">OpenTelemetry</Term> object contains a
+        <Term type="expression">Metrics</Term>
+        object, OTLP
+        <LinkExternal target="https://opentelemetry.io/docs/concepts/signals/metrics/">metrics</LinkExternal>
+        will be sent to a specified endpoint. The <Term type="expression">Endpoint</Term> property specifies the
+        endpoint, and the <Term type="expression">Protocol</Term> property must be <Term type="constant">HTTP</Term>.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Logs"
+                id="dea6eac7-9436-46aa-839a-a018ed497913">
+      <Paragraph>
+        If the <Term type="expression">OpenTelemetry</Term> object contains a
+        <Term type="expression">Logs</Term>
+        object, OTLP
+        <LinkExternal target="https://opentelemetry.io/docs/concepts/signals/logs/">logs</LinkExternal>
+        will be sent to a specified endpoint. The <Term type="expression">Endpoint</Term> property specifies the
+        endpoint, and the <Term type="expression">Protocol</Term> property property must be
+        <Term type="constant">HTTP</Term>.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Example">
+      <Paragraph>
+        An example Open Telemetry configuration:
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+"OpenTelemetry": {
+  "ServiceName": "stonesignal01",
+  "Logs": {
+    "Endpoint": "http://logs.example.com:4318/v1/logs",
+    "Protocol": "HTTP"
+  },
+  "Metrics": {
+    "Endpoint": "http://metrics.example.com:4318/v1/metrics",
+    "Protocol": "HTTP"
+  },
+  "Traces": {
+    "Endpoint": "http://traces.example.com:4318/v1/traces",
+    "Protocol": "HTTP"
+  }
+}
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Schema"
+              id="bf9d263d-a279-41bd-bfdf-78f7c3fbf7a9">
+    <Paragraph>
+      The JSON schema for the configuration file is as follows:
+    </Paragraph>
+    <FormalItem title="Configuration Schema">
+      <Verbatim>
+        <xi:include href="schema-StConfiguration.schema.json"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
+  </Subsection>
+
+</Section>

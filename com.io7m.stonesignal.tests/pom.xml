@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>com.io7m.stonesignal</artifactId>
+    <groupId>com.io7m.stonesignal</groupId>
+    <version>1.0.0-beta0001</version>
+  </parent>
+
+  <artifactId>com.io7m.stonesignal.tests</artifactId>
+
+  <name>com.io7m.stonesignal.tests</name>
+  <description>Position recorder (Test suite)</description>
+  <url>https://www.io7m.com/software/stonesignal/</url>
+
+  <properties>
+    <mdep.analyze.skip>true</mdep.analyze.skip>
+    <checkstyle.skip>true</checkstyle.skip>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>com.io7m.stonesignal.server</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-engine</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-launcher</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.io7m.percentpass</groupId>
+      <artifactId>com.io7m.percentpass.extension</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.io7m.ervilla</groupId>
+      <artifactId>com.io7m.ervilla.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.ervilla</groupId>
+      <artifactId>com.io7m.ervilla.postgres</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.ervilla</groupId>
+      <artifactId>com.io7m.ervilla.native_exec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.ervilla</groupId>
+      <artifactId>com.io7m.ervilla.test_extension</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.zelador</groupId>
+      <artifactId>com.io7m.zelador.test_extension</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Determine test coverage -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

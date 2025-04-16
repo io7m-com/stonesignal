@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section xmlns="urn:com.io7m.structural:8:0"
+         title="Admin API 1.0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="38541049-5bbb-4346-8c96-d579f5bb462c">
+
+  <Subsection title="Overview">
+    <Paragraph>
+      The <Term type="term">admin API</Term> is the API used to accept administrative
+      commands.
+    </Paragraph>
+    <Paragraph>
+      The API is designed as a set of HTTP endpoints with which clients exchange
+      messages in a strictly-defined and versioned JSON (or, optionally, CBOR-encoded)
+      format.
+    </Paragraph>
+    <Paragraph>
+      There is no version negotiation in the protocol. Clients must check to see
+      which versions are available using the
+      <Link target="a9ac5d3d-3bb8-4d90-8b5e-0c887fd81244">version document</Link>,
+      and then speak directly to the versioned endpoints using the correct
+      protocol version.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Formats">
+    <Paragraph>
+      The API endpoints allow for communicating in a number of different formats that
+      each use the same underlying data model. If a client specifies a
+      <Term type="constant">Content-Type</Term> header with a request, the server will
+      respond using the same format.
+    </Paragraph>
+    <Paragraph>
+      All API endpoints will accept a <Term type="constant">Content-Type</Term> header
+      that must be one of the following values:
+    </Paragraph>
+    <FormalItem title="Format Values">
+      <Table type="genericTable">
+        <Columns>
+          <Column>Format</Column>
+          <Column>Description</Column>
+        </Columns>
+        <Row>
+          <Cell><Term type="constant">application/stonesignal+json</Term></Cell>
+          <Cell>The textual JSON format.</Cell>
+        </Row>
+        <Row>
+          <Cell><Term type="constant">application/stonesignal+cbor</Term></Cell>
+          <Cell>The binary CBOR format.</Cell>
+        </Row>
+      </Table>
+    </FormalItem>
+    <Paragraph>
+      If no <Term type="constant">Content-Type</Term> header is provided,
+      <Term type="constant">application/stonesignal+json</Term> is assumed.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Authentication" id="202a5197-0490-4ea3-bfc3-66053af058e8">
+    <Paragraph>
+      Clients must include an <Term type="constant">Authorization</Term> header
+      with a value of <Term type="expression">Bearer k</Term>, where
+      <Term type="expression">k</Term> is the configured
+      <Link target="bcbccec0-9d9b-44e8-91d3-02400316c89d">API key</Link>.
+    </Paragraph>
+    <Paragraph>
+      All endpoints require authentication except for the
+      <Link target="a9ac5d3d-3bb8-4d90-8b5e-0c887fd81244">root</Link>
+      endpoint.
+    </Paragraph>
+    <FormalItem title="Example">
+      <Verbatim><![CDATA[
+$ curl \
+  --data-binary @data.json \
+  --header 'Content-Type: application/stonesignal+json' \
+  --header 'Authorization: Bearer 6890BF0E202343407CAF3FF100A118BDBB1BECABE343F3480E9A3DB0D9C889DC' \
+  http://example.com/1/0/device-get-by-id
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+
+  <Subsection title="Errors" id="7c5821cd-ff3a-4a6a-9493-5243c7b59901">
+    <Paragraph>
+      All endpoints return a <Term type="constant">200</Term> HTTP status code
+      on success with an endpoint-specific response message. On errors,
+      all endpoints return an HTTP status code greater than or equal to
+      <Term type="constant">400</Term> with a response conforming to the
+      following schema:
+    </Paragraph>
+    <FormalItem title="Error Schema">
+      <Verbatim><xi:include href="schema-St1AdminError.schema.json" parse="text"/></Verbatim>
+    </FormalItem>
+    <Paragraph>
+      As an example:
+    </Paragraph>
+    <FormalItem title="Error Schema">
+      <Verbatim><![CDATA[
+$ curl -s http://example.com/1/0/device-get-by-id | jq
+{
+  "ErrorCode": "error-401",
+  "Message": "Unauthorized"
+}
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+
+  <Subsection title="Endpoint: /" id="a9ac5d3d-3bb8-4d90-8b5e-0c887fd81244">
+    <Subsection title="Description">
+      <Paragraph>
+        The <Term type="endpoint">/</Term> endpoint exposes a
+        <LinkExternal target="https://github.com/io7m-com/ventrad/">ventrad</LinkExternal>
+        version document that explains which API versions are available and where they
+        are hosted.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="constant">Endpoint</Term> property of each protocol defines a
+        prefix that must be included in order to reach the correct endpoint. So, for
+        example, if the <Term type="constant">Endpoint</Term> property is
+        <Term type="endpoint">/1/0</Term>, then the
+        <Link target="94dfe20c-abf7-4acd-8d1b-1f580b434e66">/device-get-by-id</Link>
+        endpoint would be reachable at
+        <Term type="endpoint">/1/0/device-get-by-id</Term>.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Request Type">
+      <Paragraph>
+        The endpoint ignores any request data.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Response Type">
+      <Paragraph>
+        The endpoint responds with a
+        <LinkExternal target="https://github.com/io7m-com/ventrad/">ventrad</LinkExternal>
+        version document.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Example">
+      <FormalItem title="Example Request">
+        <Verbatim><![CDATA[
+$ curl -s http://example.com/ | jq
+{
+  "%Schema": "urn:com.io7m.ventrad:1",
+  "Protocols": [
+    {
+      "Id": "com.io7m.stonesignal.admin",
+      "VersionMajor": 1,
+      "VersionMinor": 0,
+      "Endpoint": "/1/0/",
+      "Description": "Stonesignal 1.0 Admin API"
+    }
+  ]
+}
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Endpoint: /device-get-by-id" id="94dfe20c-abf7-4acd-8d1b-1f580b434e66">
+    <Subsection title="Description">
+      <Paragraph>
+        The <Term type="endpoint">/device-get-by-id</Term> endpoint is used to retrieve the definition
+        of a device by its
+        <Link target="592a5adc-1ec4-42df-8cb7-1f954e78421a">ID</Link>.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Request Type">
+      <Paragraph>
+        The endpoint expects requests of the following type:
+      </Paragraph>
+      <FormalItem title="Request Schema">
+        <Verbatim><xi:include href="schema-St1AdminDeviceGetByID.schema.json" parse="text"/></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Response Type">
+      <Paragraph>
+        The endpoint responds with objects of the following type:
+      </Paragraph>
+      <FormalItem title="Response Schema">
+        <Verbatim><xi:include href="schema-St1AdminDeviceGetResponse.schema.json" parse="text"/></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Example">
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+$ cat data.json
+{
+  "DeviceID": "f4f3bdce-fb35-4158-b122-4d7c861c1b18"
+}
+
+$ curl \
+  --data-binary @data.json \
+  --header 'Content-Type: application/stonesignal+json' \
+  --header 'Authorization: Bearer 6890BF0E202343407CAF3FF100A118BDBB1BECABE343F3480E9A3DB0D9C889DC' \
+  http://example.com/1/0/device-get-by-id
+{
+  "Device": {
+    "DeviceID": "f4f3bdce-fb35-4158-b122-4d7c861c1b18",
+    "DeviceKey": "0D00B8679D5CA37A731BBA2575AD259E9E0309517E16010A0ED55792E5C6D56D",
+    "Name": "Fake",
+    "Metadata": {}
+  }
+}
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Endpoint: /device-get-by-key" id="7cb7c456-da7d-4255-bd50-92c4a91d336c">
+    <Subsection title="Description">
+      <Paragraph>
+        The <Term type="endpoint">/device-get-by-key</Term> endpoint is used to retrieve the definition
+        of a device by its
+        <Link target="ca25266d-71aa-4ad8-8e75-3fe03bb9f8a5">key</Link>.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Request Type">
+      <Paragraph>
+        The endpoint expects requests of the following type:
+      </Paragraph>
+      <FormalItem title="Request Schema">
+        <Verbatim><xi:include href="schema-St1AdminDeviceGetByKey.schema.json" parse="text"/></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Response Type">
+      <Paragraph>
+        The endpoint responds with objects of the following type:
+      </Paragraph>
+      <FormalItem title="Response Schema">
+        <Verbatim><xi:include href="schema-St1AdminDeviceGetResponse.schema.json" parse="text"/></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Example">
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+$ cat data.json
+{
+  "DeviceKey": "0D00B8679D5CA37A731BBA2575AD259E9E0309517E16010A0ED55792E5C6D56D"
+}
+
+$ curl \
+  --data-binary @data.json \
+  --header 'Content-Type: application/stonesignal+json' \
+  --header 'Authorization: Bearer 6890BF0E202343407CAF3FF100A118BDBB1BECABE343F3480E9A3DB0D9C889DC' \
+  http://example.com/1/0/device-get-by-key
+{
+  "Device": {
+    "DeviceID": "f4f3bdce-fb35-4158-b122-4d7c861c1b18",
+    "DeviceKey": "0D00B8679D5CA37A731BBA2575AD259E9E0309517E16010A0ED55792E5C6D56D",
+    "Name": "Fake",
+    "Metadata": {}
+  }
+}
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Endpoint: /device-put" id="c8425026-b5b1-44ec-85eb-bf66c6162529">
+    <Subsection title="Description">
+      <Paragraph>
+        The <Term type="endpoint">/device-put</Term> endpoint is used to update or create the definition
+        of a device.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Request Type">
+      <Paragraph>
+        The endpoint expects requests of the following type:
+      </Paragraph>
+      <FormalItem title="Request Schema">
+        <Verbatim><xi:include href="schema-St1AdminDevicePut.schema.json" parse="text"/></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Response Type">
+      <Paragraph>
+        The endpoint responds with an empty object.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Example">
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+$ cat data.json
+{
+  "Device": {
+    "DeviceID": "f057fc17-07ef-4b89-8aa1-004eb992a364",
+    "DeviceKey": "ACCD3D5D5C3864083E371BD1E161C6071C3A847943CCCA6A833CECC1FA67D30C",
+    "Name": "Fake",
+    "Metadata": {
+      "Manufacturer": "Bad Phones LLC"
+    }
+  }
+}
+
+$ curl \
+  --data-binary @data.json \
+  --header 'Content-Type: application/stonesignal+json' \
+  --header 'Authorization: Bearer 6890BF0E202343407CAF3FF100A118BDBB1BECABE343F3480E9A3DB0D9C889DC' \
+  http://example.com/1/0/device-put
+{}
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+</Section>

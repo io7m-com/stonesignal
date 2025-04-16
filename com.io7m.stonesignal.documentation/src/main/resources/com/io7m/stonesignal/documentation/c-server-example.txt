@@ -1,0 +1,4 @@
+$ stonesignal server --configuration server.conf
+stonesignal: INFO: com.io7m.stonesignal.server.device_api_v1.StDeviceAPI: [localhost/<unresolved>:10000] Device API server started
+stonesignal: INFO: com.io7m.stonesignal.server.admin_api_v1.StAdminAPI: [localhost/<unresolved>:10001] Admin API server started
+stonesignal: INFO: com.io7m.stonesignal.server.data_api_v1.StDataAPI: [localhost/<unresolved>:10002] Data API server started

@@ -1,0 +1,18 @@
+FROM docker.io/library/alpine:${com.io7m.oci.versionAlpine}
+FROM docker.io/library/eclipse-temurin:${com.io7m.oci.versionTemurin}
+
+ENV PATH="/stonesignal/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/java/openjdk/bin"
+ENV STONESIGNAL_HOME="/stonesignal"
+
+COPY stonesignal /stonesignal
+
+LABEL "org.opencontainers.image.authors"="Mark Raynsford"
+LABEL "org.opencontainers.image.description"="Position recorder"
+LABEL "org.opencontainers.image.licenses"="ISC"
+LABEL "org.opencontainers.image.source"="https://www.github.com/io7m-com/stonesignal"
+LABEL "org.opencontainers.image.title"="Stonesignal"
+LABEL "org.opencontainers.image.url"="https://www.io7m.com/software/stonesignal"
+LABEL "org.opencontainers.image.version"="${project.version}"
+LABEL "org.opencontainers.image.revision"="${buildNumber}"
+
+ENTRYPOINT ["/stonesignal/bin/stonesignal"]

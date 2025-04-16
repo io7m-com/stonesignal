@@ -1,0 +1,19 @@
+stonesignal: usage: version
+
+  Show the application version.
+
+  The command does not accept any named arguments.
+
+  The command does not accept any positional arguments.
+  
+  The version command produces the following output, in order:
+  
+    * The application ID (such as "com.io7m.quarrel")
+    * The application version (such as "1.2.0")
+    * The application build (such as "eacd59a2")
+  
+  For example, for a hypothetical application named "quarrel":
+  
+    $ quarrel version
+    com.io7m.quarrel 1.2.0 eacd59a2
+

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section xmlns="urn:com.io7m.structural:8:0"
+         id="76e24129-5e97-4f65-bd12-4cf509510016"
+         title="Monitoring">
+
+  <Subsection title="Overview">
+    <Paragraph>
+      The <Term type="package">stonesignal</Term> package is extensively instrumented with
+      <LinkExternal target="https://opentelemetry.io">OpenTelemetry</LinkExternal>
+      in order to allow for the server to be continually monitored. The package publishes
+      <Link target="c2dc398a-bfb8-41a4-b9a5-3902f937b60c">metrics</Link>,
+      logs, and traces, all of which can be independently enabled or disabled. Most installations will only want to
+      enable metrics or logs in production; traces are more useful when trying to diagnose performance
+      problems, or for doing actual development on the <Term type="package">stonesignal</Term> package.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Metrics" id="c2dc398a-bfb8-41a4-b9a5-3902f937b60c">
+    <Subsection title="Names">
+      <Paragraph>
+        The package publishes the following metrics that can be used for monitoring:
+      </Paragraph>
+      <FormalItem title="Metrics">
+        <Table type="genericTable">
+          <Columns>
+            <Column>Name</Column>
+            <Column>Description</Column>
+          </Columns>
+          <Row>
+            <Cell>
+              <Term type="expression">stonesignal_up</Term>
+            </Cell>
+            <Cell>
+              A gauge that displays a constant <Term type="constant">1</Term> value while the server is up.
+            </Cell>
+          </Row>
+          <Row>
+            <Cell>
+              <Term type="expression">stonesignal_http_time</Term>
+            </Cell>
+            <Cell>
+              A gauge that logs the time each HTTP request has taken in nanoseconds.
+            </Cell>
+          </Row>
+          <Row>
+            <Cell>
+              <Term type="expression">stonesignal_http_requests</Term>
+            </Cell>
+            <Cell>
+              A counter that is incremented every time an HTTP request is handled.
+            </Cell>
+          </Row>
+          <Row>
+            <Cell>
+              <Term type="expression">stonesignal_http_requests_size</Term>
+            </Cell>
+            <Cell>
+              A counter that is incremented with the size of every HTTP request.
+            </Cell>
+          </Row>
+          <Row>
+            <Cell>
+              <Term type="expression">stonesignal_http_responses_size</Term>
+            </Cell>
+            <Cell>
+              A counter that is incremented with the size of every produced HTTP response.
+            </Cell>
+          </Row>
+          <Row>
+            <Cell>
+              <Term type="expression">stonesignal_http_responses_2xx</Term>
+            </Cell>
+            <Cell>
+              A counter that is incremented with every HTTP response that produces a 2xx status code.
+            </Cell>
+          </Row>
+          <Row>
+            <Cell>
+              <Term type="expression">stonesignal_http_responses_4xx</Term>
+            </Cell>
+            <Cell>
+              A counter that is incremented with every HTTP response that produces a 4xx status code. A 4xx
+              status code should be understood to mean "blame the client".
+            </Cell>
+          </Row>
+          <Row>
+            <Cell>
+              <Term type="expression">stonesignal_http_responses_5xx</Term>
+            </Cell>
+            <Cell>
+              A counter that is incremented with every HTTP response that produces a 5xx status code. A 5xx
+              status code should be understood to mean "blame the server".
+            </Cell>
+          </Row>
+        </Table>
+      </FormalItem>
+      <Paragraph>
+        The package <Term type="term">may</Term> produce other metrics, however these are undocumented and
+        should not be relied upon.
+      </Paragraph>
+    </Subsection>
+  </Subsection>
+
+</Section>

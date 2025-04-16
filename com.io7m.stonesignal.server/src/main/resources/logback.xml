@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration xmlns="http://ch.qos.logback/xml/ns/logback"
+               debug="false">
+  <appender name="STDERR"
+            class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>stonesignal: %level: %logger{128}: %msg%n</pattern>
+    </encoder>
+    <target>System.err</target>
+  </appender>
+
+  <logger name="io.helidon"
+          level="ERROR"/>
+
+  <root level="INFO">
+    <appender-ref ref="STDERR"/>
+  </root>
+
+</configuration>

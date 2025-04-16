@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section title="General"
+         xmlns="urn:com.io7m.structural:8:0">
+
+  <Subsection title="Potential Attack: API Resource Exhaustion">
+    <Subsection title="Description">
+      <Paragraph>
+        An attacker with access to the APIs could send specially crafted messages designed to exhaust
+        server resources during parsing/validation of the messages.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Mitigation">
+      <Paragraph>
+        All APIs exposed by the <Term type="package">stonesignal</Term> server are defined in terms
+        of simple, flat record types. The 
+        <LinkExternal target="https://github.com/FasterXML/jackson">jackson</LinkExternal> parser
+        is used to deserialize JSON and CBOR requests, and the 
+        <LinkExternal target="https://github.com/io7m-com/dixmont">dixmont</LinkExternal> package
+        is used to prevent the deserialization of anything other than a fixed list of types.
+      </Paragraph>
+      <Paragraph>
+        Additionally, requests made to the
+        <Link target="8527fc4f-5c16-4cf9-bda5-f24ffce783f5">device API</Link>
+        and the
+        <Link target="b26bc7fc-ebaa-410f-aa9e-0c074f76c329">data API</Link>
+        have a hardcoded maximum size limit of
+        <Term type="constant">32768</Term> octets.
+      </Paragraph>
+    </Subsection>
+  </Subsection>
+
+</Section>
