@@ -768,4 +768,38 @@ public class StServerAdminTest
       }
     }
   }
+
+  @Test
+  public void testAdminDevicePutMalformedMetadataJSON()
+    throws Exception
+  {
+    final var text = """
+{
+  "Device": {
+    "DeviceID": "f057fc17-07ef-4b89-8aa1-004eb992a364",
+    "DeviceKey": "ACCD3D5D5C3864083E371BD1E161C6071C3A847943CCCA6A833CECC1FA67D30C",
+    "Name": "Fake",
+    "Metadata": {
+      "Manufacturer": 23,
+      "What?": {}
+    }
+  }
+}
+      """;
+
+    try (final var client = HttpClient.newHttpClient()) {
+      final var request =
+        HttpRequest.newBuilder(
+            URI.create("http://localhost:10001/1/0/device-put"))
+          .header(
+            "Authorization",
+            "Bearer " + this.configuration.adminAPI().apiKey())
+          .POST(HttpRequest.BodyPublishers.ofString(text))
+          .build();
+
+      final var r = client.send(request, BodyHandlers.ofString());
+      LOG.debug("Got: {}: {}", r.statusCode(), r.body());
+      assertEquals(400, r.statusCode());
+    }
+  }
 }
