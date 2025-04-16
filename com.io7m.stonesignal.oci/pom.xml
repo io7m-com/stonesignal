@@ -19,7 +19,10 @@
   <url>https://www.io7m.com/software/stonesignal/</url>
 
   <properties>
+    <checkstyle.skip>true</checkstyle.skip>
     <mdep.analyze.skip>true</mdep.analyze.skip>
+    <spotbugs.skip>true</spotbugs.skip>
+    <bnd.baseline.skip>true</bnd.baseline.skip>
 
     <com.io7m.oci.versionAlpine>3.21.3</com.io7m.oci.versionAlpine>
     <com.io7m.oci.versionTemurin>23.0.2_7-jre-alpine</com.io7m.oci.versionTemurin>
