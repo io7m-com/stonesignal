@@ -36,6 +36,31 @@
         The <Term type="expression">DeviceAPI</Term> section of the configuration file configures the
         <Link target="8527fc4f-5c16-4cf9-bda5-f24ffce783f5">device API service</Link>.
       </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Host</Term> property specifies the address to which to bind the
+        service.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Port</Term> property specifies the port to which to bind the
+        service.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">TLS</Term> property, if present, specifies
+        <Link target="a9cf13b9-a641-4aa0-a18b-78138e70e596">TLS</Link> information for the service.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Example">
+      <Paragraph>
+        An example configuration:
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+"DeviceAPI": {
+  "Host": "localhost",
+  "Port": 10000
+}
+]]></Verbatim>
+      </FormalItem>
     </Subsection>
   </Subsection>
 
@@ -45,6 +70,36 @@
         The <Term type="expression">AdminAPI</Term> section of the configuration file configures the
         <Link target="df108840-ae27-456c-b3c0-da810f385f23">admin API service</Link>.
       </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Host</Term> property specifies the address to which to bind the
+        service.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Port</Term> property specifies the port to which to bind the
+        service.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">APIKey</Term> property specifies the shared secret that clients are
+        required to provide in order to access the API.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">TLS</Term> property, if present, specifies
+        <Link target="a9cf13b9-a641-4aa0-a18b-78138e70e596">TLS</Link> information for the service.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Example">
+      <Paragraph>
+        An example configuration:
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+"AdminAPI": {
+  "Host": "localhost",
+  "Port": 10001,
+  "APIKey": "1DE48CA6D6A5C172B259850D9A060AE9E51BDB2DF28CEDB19DFF1A4DDCC3521F"
+}
+]]></Verbatim>
+      </FormalItem>
     </Subsection>
   </Subsection>
 
@@ -54,6 +109,123 @@
         The <Term type="expression">DataAPI</Term> section of the configuration file configures the
         <Link target="b26bc7fc-ebaa-410f-aa9e-0c074f76c329">data API service</Link>.
       </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Host</Term> property specifies the address to which to bind the
+        service.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Port</Term> property specifies the port to which to bind the
+        service.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">APIKey</Term> property specifies the shared secret that clients are
+        required to provide in order to access the API.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">TLS</Term> property, if present, specifies
+        <Link target="a9cf13b9-a641-4aa0-a18b-78138e70e596">TLS</Link> information for the service.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Example">
+      <Paragraph>
+        An example configuration:
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+"DataAPI": {
+  "Host": "localhost",
+  "Port": 10002,
+  "APIKey": "164FA81EFDC9D27C4FD7BD0875C0C4702AE75D9DB9148BBD79EE0B6E531EA7A2"
+}
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="TLS" id="a9cf13b9-a641-4aa0-a18b-78138e70e596">
+    <Subsection title="Description">
+      <Paragraph>
+        The <Term type="expression">TLS</Term> section(s) of the configuration file configures TLS
+        information for the service in which it appears. If a <Term type="expression">TLS</Term>
+        object is not present, then no TLS is used for the service.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">KeyStore</Term> property specifies the
+        <Link target="dc72376b-275e-48b7-b9f5-1c309a536adb">key store</Link> that will be
+        used for TLS connections.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">TrustStore</Term> property specifies the
+        <Link target="99c1e0a3-cdf6-4823-b988-642fa0b84fa6">trust store</Link> that will be
+        used for TLS connections.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="KeyStore" id="dc72376b-275e-48b7-b9f5-1c309a536adb">
+      <Paragraph>
+        The <Term type="type">KeyStore</Term> object specifies TLS parameters for the key store.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Type</Term> property specifies the type of the store.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Provider</Term> property specifies the security provider.
+        The <Term type="package">stonesignal</Term> package supports the standard JDK security
+        provider, and also supports
+        <LinkExternal target="https://www.io7m.com/software/canonmill/">canonmill</LinkExternal>.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Password</Term> property specifies the password used to
+        open the store.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Path</Term> property specifies the file location of the
+        store.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="TrustStore" id="99c1e0a3-cdf6-4823-b988-642fa0b84fa6">
+      <Paragraph>
+        The <Term type="type">TrustStore</Term> object specifies TLS parameters for the key store.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Type</Term> property specifies the type of the store.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Provider</Term> property specifies the security provider.
+        The <Term type="package">stonesignal</Term> package supports the standard JDK security
+        provider, and also supports
+        <LinkExternal target="https://www.io7m.com/software/canonmill/">canonmill</LinkExternal>.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Password</Term> property specifies the password used to
+        open the store.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="expression">Path</Term> property specifies the file location of the
+        store.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Example">
+      <Paragraph>
+        An example configuration:
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+{
+  "KeyStore": {
+    "Type": "CANONMILL",
+    "Provider": "CANONMILL",
+    "Password": "changeit",
+    "Path": "key.xml"
+  },
+  "TrustStore": {
+    "Type": "JKS",
+    "Provider": "SUN",
+    "Password": "changeit",
+    "Path": "trust.jks"
+  }
+}
+]]></Verbatim>
+      </FormalItem>
     </Subsection>
   </Subsection>
 
