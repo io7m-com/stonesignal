@@ -53,7 +53,7 @@
     <com.io7m.zelador.version>1.0.0</com.io7m.zelador.version>
 
     <!-- Third-party dependencies. -->
-    <com.fasterxml.jackson.version>2.18.3</com.fasterxml.jackson.version>
+    <com.fasterxml.jackson.version>2.19.0</com.fasterxml.jackson.version>
     <io.helidon.version>4.2.0</io.helidon.version>
     <io.opentelemetry.version>1.49.0</io.opentelemetry.version>
     <org.jooq.version>3.20.3</org.jooq.version>
