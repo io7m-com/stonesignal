@@ -11,6 +11,9 @@ on:
   push:
     tags: [ com.io7m.stonesignal-* ]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
