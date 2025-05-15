@@ -42,18 +42,18 @@
           <Column>Description</Column>
         </Columns>
         <Row>
-          <Cell><Term type="constant">application/stonesignal+json</Term></Cell>
+          <Cell><Term type="constant">application/vnd.stonesignal+json</Term></Cell>
           <Cell>The textual JSON format.</Cell>
         </Row>
         <Row>
-          <Cell><Term type="constant">application/stonesignal+cbor</Term></Cell>
+          <Cell><Term type="constant">application/vnd.stonesignal+cbor</Term></Cell>
           <Cell>The binary CBOR format.</Cell>
         </Row>
       </Table>
     </FormalItem>
     <Paragraph>
       If no <Term type="constant">Content-Type</Term> header is provided,
-      <Term type="constant">application/stonesignal+json</Term> is assumed.
+      <Term type="constant">application/vnd.stonesignal+json</Term> is assumed.
     </Paragraph>
   </Subsection>
 
@@ -73,7 +73,7 @@
       <Verbatim><![CDATA[
 $ curl \
   --data-binary @data.json \
-  --header 'Content-Type: application/stonesignal+json' \
+  --header 'Content-Type: application/vnd.stonesignal+json' \
   --header 'Authorization: Bearer 6890BF0E202343407CAF3FF100A118BDBB1BECABE343F3480E9A3DB0D9C889DC' \
   http://example.com/1/0/device-get-by-id
 ]]></Verbatim>
@@ -190,7 +190,7 @@ $ cat data.json
 
 $ curl \
   --data-binary @data.json \
-  --header 'Content-Type: application/stonesignal+json' \
+  --header 'Content-Type: application/vnd.stonesignal+json' \
   --header 'Authorization: Bearer 6890BF0E202343407CAF3FF100A118BDBB1BECABE343F3480E9A3DB0D9C889DC' \
   http://example.com/1/0/audit-get
 {
@@ -244,7 +244,7 @@ $ cat data.json
 
 $ curl \
   --data-binary @data.json \
-  --header 'Content-Type: application/stonesignal+json' \
+  --header 'Content-Type: application/vnd.stonesignal+json' \
   --header 'Authorization: Bearer 6890BF0E202343407CAF3FF100A118BDBB1BECABE343F3480E9A3DB0D9C889DC' \
   http://example.com/1/0/device-get-by-id
 {
@@ -294,7 +294,7 @@ $ cat data.json
 
 $ curl \
   --data-binary @data.json \
-  --header 'Content-Type: application/stonesignal+json' \
+  --header 'Content-Type: application/vnd.stonesignal+json' \
   --header 'Authorization: Bearer 6890BF0E202343407CAF3FF100A118BDBB1BECABE343F3480E9A3DB0D9C889DC' \
   http://example.com/1/0/device-get-by-key
 {
@@ -347,7 +347,7 @@ $ cat data.json
 
 $ curl \
   --data-binary @data.json \
-  --header 'Content-Type: application/stonesignal+json' \
+  --header 'Content-Type: application/vnd.stonesignal+json' \
   --header 'Authorization: Bearer 6890BF0E202343407CAF3FF100A118BDBB1BECABE343F3480E9A3DB0D9C889DC' \
   http://example.com/1/0/device-put
 {}

@@ -409,7 +409,7 @@ public class StServerDataTest
         final var request =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10001/1/0/device-put"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .header(
               "Authorization",
               "Bearer " + this.configuration.adminAPI().apiKey())
@@ -436,7 +436,7 @@ public class StServerDataTest
         final var request =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10002/1/0/device-get-by-id"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .header(
               "Authorization",
               "Bearer " + this.configuration.dataAPI().apiKey())
@@ -483,7 +483,7 @@ public class StServerDataTest
         final var request =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10002/1/0/device-get-by-id"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .header(
               "Authorization",
               "Bearer " + this.configuration.dataAPI().apiKey())
@@ -525,7 +525,7 @@ public class StServerDataTest
         final var request =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10002/1/0/device-get-by-id"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .header(
               "Authorization",
               "Bearer F2AEC3AC60DBEB7D43B0C5F68453D515BF99EE3E6E888275D39AE1A9EFD522B2")
@@ -544,7 +544,7 @@ public class StServerDataTest
         final var request =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10002/1/0/device-get-by-id"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .POST(HttpRequest.BodyPublishers.ofByteArray(
               dataMapper.writeValueAsBytes(new St1DataDeviceGetByID(device.id()))
             ))
@@ -561,7 +561,7 @@ public class StServerDataTest
           HttpRequest.newBuilder(
               URI.create("http://localhost:10002/1/0/device-get-by-id"))
             .header("Authorization", "B")
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .POST(HttpRequest.BodyPublishers.ofByteArray(
               dataMapper.writeValueAsBytes(new St1DataDeviceGetByID(device.id()))
             ))
@@ -684,7 +684,7 @@ public class StServerDataTest
         final var request =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10001/1/0/device-put"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .header(
               "Authorization",
               "Bearer " + this.configuration.adminAPI().apiKey())
@@ -711,7 +711,7 @@ public class StServerDataTest
         final var request =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10002/1/0/devices"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .header(
               "Authorization",
               "Bearer " + this.configuration.dataAPI().apiKey())
@@ -981,7 +981,7 @@ public class StServerDataTest
           final var put =
             HttpRequest.newBuilder(
                 URI.create("http://localhost:10001/1/0/device-put"))
-              .header("Content-Type", "application/stonesignal+cbor")
+              .header("Content-Type", "application/vnd.stonesignal+cbor")
               .header(
                 "Authorization",
                 "Bearer " + configuration.adminAPI().apiKey())
@@ -999,7 +999,7 @@ public class StServerDataTest
           final var loc =
             HttpRequest.newBuilder(
                 URI.create("http://localhost:10000/1/0/device-location-put"))
-              .header("Content-Type", "application/stonesignal+cbor")
+              .header("Content-Type", "application/vnd.stonesignal+cbor")
               .header(
                 "Authorization",
                 "Bearer " + device.deviceKey())
@@ -1029,7 +1029,7 @@ public class StServerDataTest
         final var put =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10002/1/0/device-locations"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .header(
               "Authorization",
               "Bearer " + configuration.dataAPI().apiKey())
@@ -1085,7 +1085,7 @@ public class StServerDataTest
           final var put =
             HttpRequest.newBuilder(
                 URI.create("http://localhost:10001/1/0/device-put"))
-              .header("Content-Type", "application/stonesignal+cbor")
+              .header("Content-Type", "application/vnd.stonesignal+cbor")
               .header(
                 "Authorization",
                 "Bearer " + configuration.adminAPI().apiKey())
@@ -1103,7 +1103,7 @@ public class StServerDataTest
           final var loc =
             HttpRequest.newBuilder(
                 URI.create("http://localhost:10000/1/0/device-location-put"))
-              .header("Content-Type", "application/stonesignal+cbor")
+              .header("Content-Type", "application/vnd.stonesignal+cbor")
               .header(
                 "Authorization",
                 "Bearer " + device.deviceKey())
@@ -1133,7 +1133,7 @@ public class StServerDataTest
         final var put =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10002/1/0/device-location-history"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .header(
               "Authorization",
               "Bearer " + configuration.dataAPI().apiKey())

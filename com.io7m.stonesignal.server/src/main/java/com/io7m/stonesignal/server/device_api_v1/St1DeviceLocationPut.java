@@ -65,9 +65,14 @@ public final class St1DeviceLocationPut
     final ServerResponse response)
     throws IOException, DDatabaseException
   {
+    final var state =
+      request.context()
+        .get(St1DeviceState.class)
+        .orElseThrow();
+
     final St1DeviceLocationUpdate data;
     try {
-      data = this.read(request, St1DeviceLocationUpdate.class);
+      data = this.read(state, request, St1DeviceLocationUpdate.class);
     } catch (final IOException e) {
       response.status(Status.BAD_REQUEST_400);
       throw e;
@@ -77,7 +82,7 @@ public final class St1DeviceLocationPut
       final var p = t.query(StDBDeviceLocationUpdatePutType.class);
       p.execute(new StDeviceLocation(
         0L,
-        this.device().id(),
+        state.device().id(),
         this.clock.nowPrecise(),
         data.accuracy(),
         data.altitude(),
@@ -97,7 +102,7 @@ public final class St1DeviceLocationPut
     }
 
     response.status(200);
-    this.send(response, new St1DeviceOK());
+    this.send(state, response, new St1DeviceOK());
   }
 
   @Override

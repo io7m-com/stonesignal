@@ -55,8 +55,13 @@ public final class St1AdminHDeviceGetByID
     final ServerResponse response)
     throws DDatabaseException
   {
+    final var state =
+      request.context()
+        .get(St1AdminState.class)
+        .orElseThrow();
+
     final var data =
-      this.read(request, St1AdminDeviceGetByID.class);
+      this.read(state, request, St1AdminDeviceGetByID.class);
 
     final Optional<St1AdminDevice> device;
     try (final var t = this.database.openTransaction()) {
@@ -77,7 +82,7 @@ public final class St1AdminHDeviceGetByID
     }
 
     response.status(200);
-    this.send(response, new St1AdminDeviceGetResponse(device));
+    this.send(state, response, new St1AdminDeviceGetResponse(device));
   }
 
   @Override

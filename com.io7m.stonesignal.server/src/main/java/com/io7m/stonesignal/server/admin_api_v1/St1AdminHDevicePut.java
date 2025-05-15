@@ -53,8 +53,13 @@ public final class St1AdminHDevicePut
     final ServerResponse response)
     throws DDatabaseException
   {
+    final var state =
+      request.context()
+        .get(St1AdminState.class)
+        .orElseThrow();
+
     final var data =
-      this.read(request, St1AdminDevicePut.class);
+      this.read(state, request, St1AdminDevicePut.class);
 
     try (final var t = this.database.openTransaction()) {
       final var p = t.query(StDBDevicePutType.class);
@@ -74,7 +79,7 @@ public final class St1AdminHDevicePut
     }
 
     response.status(200);
-    this.send(response, new St1AdminOK());
+    this.send(state, response, new St1AdminOK());
   }
 
   @Override

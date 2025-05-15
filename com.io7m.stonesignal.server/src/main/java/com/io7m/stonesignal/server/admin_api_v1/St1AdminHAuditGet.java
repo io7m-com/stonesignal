@@ -56,8 +56,13 @@ public final class St1AdminHAuditGet
     final ServerResponse response)
     throws DDatabaseException
   {
+    final var state =
+      request.context()
+        .get(St1AdminState.class)
+        .orElseThrow();
+
     final var data =
-      this.read(request, St1AdminAuditGet.class);
+      this.read(state, request, St1AdminAuditGet.class);
 
     final List<StAuditEvent> events;
     try (final var t = this.database.openTransaction()) {
@@ -77,6 +82,7 @@ public final class St1AdminHAuditGet
 
     response.status(200);
     this.send(
+      state,
       response,
       new St1AdminAuditGetResponse(
         events.stream()

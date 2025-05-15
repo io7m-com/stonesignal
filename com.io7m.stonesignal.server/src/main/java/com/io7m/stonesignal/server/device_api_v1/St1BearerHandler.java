@@ -25,7 +25,6 @@ import com.io7m.stonesignal.protocol.device.v1.St1DeviceMessageType;
 import com.io7m.stonesignal.server.StVersion;
 import com.io7m.stonesignal.server.database.StDBDeviceGetByKeyType;
 import com.io7m.stonesignal.server.database.StDatabaseType;
-import com.io7m.stonesignal.server.devices.StDevice;
 import com.io7m.stonesignal.server.devices.StDeviceKey;
 import com.io7m.stonesignal.server.http.StFormat;
 import com.io7m.stonesignal.server.http.StHTTPServerRequestContextExtractor;
@@ -48,7 +47,6 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -66,10 +64,6 @@ abstract class St1BearerHandler implements Handler
   private final StDatabaseType database;
   private final StTelemetryServiceType telemetry;
   private final StMetricsServiceType metrics;
-  private StFormat format;
-  private StDeviceKey token;
-  private UUID requestId;
-  private StDevice device;
 
   protected St1BearerHandler(
     final RPServiceDirectoryType inServices)
@@ -82,8 +76,6 @@ abstract class St1BearerHandler implements Handler
       inServices.requireService(StTelemetryServiceType.class);
     this.metrics =
       inServices.requireService(StMetricsServiceType.class);
-    this.format =
-      StFormat.JSON;
   }
 
   private static String remoteAddress(
@@ -98,29 +90,27 @@ abstract class St1BearerHandler implements Handler
     }
   }
 
-  protected final StDevice device()
-  {
-    return this.device;
-  }
-
   @Override
   public final void handle(
     final ServerRequest request,
     final ServerResponse response)
   {
-    this.requestId = UUID.randomUUID();
+    final var context = request.context();
+    final var state = new St1DeviceState();
+    context.register(state);
+
     this.metrics.onHttpRequested();
 
     final var span =
-      this.createSpan(request);
+      this.createSpan(state, request);
 
     try {
       final var headers = request.headers();
-      this.format = StFormat.findFormat(headers);
+      state.setFormat(StFormat.findFormat(headers));
 
-      response.header("Content-Type", this.format.mediaType().text());
-      this.findAuthorization(headers);
-      this.checkAuthorization();
+      response.header("Content-Type", state.format().mediaType().text());
+      this.findAuthorization(state, headers);
+      this.checkAuthorization(state);
 
       response.header(
         "Server",
@@ -135,13 +125,13 @@ abstract class St1BearerHandler implements Handler
     } catch (final HttpException e) {
       response.status(e.status());
       span.recordException(e);
-      this.sendErrorHTTP(e, response);
+      this.sendErrorHTTP(state, e, response);
     } catch (final DDatabaseException e) {
       span.recordException(e);
-      this.sendErrorDatabase(e, response);
+      this.sendErrorDatabase(state, e, response);
     } catch (final Throwable e) {
       span.recordException(e);
-      this.sendErrorAny(e, response);
+      this.sendErrorAny(state, e, response);
     } finally {
       this.recordMetrics(response);
       span.end();
@@ -177,6 +167,7 @@ abstract class St1BearerHandler implements Handler
   }
 
   private Span createSpan(
+    final St1DeviceState state,
     final ServerRequest request)
   {
     final var context =
@@ -197,19 +188,20 @@ abstract class St1BearerHandler implements Handler
       .setAttribute("http.client_ip", remoteAddress(request))
       .setAttribute("http.method", request.prologue().method().text())
       .setAttribute("http.request_path", request.path().path())
-      .setAttribute("http.request_id", this.requestId.toString())
+      .setAttribute("http.request_id", state.requestId().toString())
       .setAttribute("stonesignal.endpoint", this.name())
       .startSpan();
   }
 
-  private void checkAuthorization()
+  private void checkAuthorization(
+    final St1DeviceState state)
     throws DDatabaseException
   {
     try (final var transaction = this.database.openTransaction()) {
       final var q =
         transaction.query(StDBDeviceGetByKeyType.class);
       final var dOpt =
-        q.execute(this.token);
+        q.execute(state.token());
 
       if (dOpt.isEmpty()) {
         throw new HttpException(
@@ -217,7 +209,7 @@ abstract class St1BearerHandler implements Handler
           Status.UNAUTHORIZED_401
         );
       }
-      this.device = dOpt.get();
+      state.setDevice(dOpt.get());
     }
   }
 
@@ -237,11 +229,13 @@ abstract class St1BearerHandler implements Handler
   }
 
   private void sendErrorDatabase(
+    final St1DeviceState state,
     final DDatabaseException exception,
     final ServerResponse response)
   {
     setStatusIfNecessary(response);
     this.send(
+      state,
       response,
       new St1DeviceError(
         exception.errorCode(),
@@ -251,10 +245,12 @@ abstract class St1BearerHandler implements Handler
   }
 
   private void sendErrorHTTP(
+    final St1DeviceState state,
     final HttpException exception,
     final ServerResponse response)
   {
     this.send(
+      state,
       response,
       new St1DeviceError(
         "error-" + response.status().code(),
@@ -264,6 +260,7 @@ abstract class St1BearerHandler implements Handler
   }
 
   private void sendErrorAny(
+    final St1DeviceState state,
     final Throwable exception,
     final ServerResponse response)
   {
@@ -272,18 +269,20 @@ abstract class St1BearerHandler implements Handler
 
     setStatusIfNecessary(response);
     this.send(
+      state,
       response,
       new St1DeviceError("error-general", message)
     );
   }
 
   protected final <C extends St1DeviceMessageType> C read(
+    final St1DeviceState state,
     final ServerRequest request,
     final Class<C> clazz)
     throws IOException
   {
     try (final var stream = request.content().inputStream()) {
-      return switch (this.format) {
+      return switch (state.format()) {
         case JSON -> St1DeviceProtocolMapperJSON.get().readValue(stream, clazz);
         case CBOR -> St1DeviceProtocolMapperCBOR.get().readValue(stream, clazz);
       };
@@ -291,6 +290,7 @@ abstract class St1BearerHandler implements Handler
   }
 
   private void findAuthorization(
+    final St1DeviceState state,
     final ServerRequestHeaders headers)
   {
     try {
@@ -298,7 +298,7 @@ abstract class St1BearerHandler implements Handler
       for (final var value : bearer.allValues()) {
         final var matcher = PATTERN.matcher(value);
         if (matcher.matches()) {
-          this.token = new StDeviceKey(matcher.group(1));
+          state.setToken(new StDeviceKey(matcher.group(1)));
           return;
         }
       }
@@ -315,12 +315,13 @@ abstract class St1BearerHandler implements Handler
   }
 
   protected final void send(
+    final St1DeviceState state,
     final ServerResponse response,
     final St1DeviceMessageType message)
   {
     try {
       response.send(
-        switch (this.format) {
+        switch (state.format()) {
           case JSON ->
             St1DeviceProtocolMapperJSON.get().writeValueAsBytes(message);
           case CBOR ->

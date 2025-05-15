@@ -139,6 +139,10 @@
       <artifactId>helidon-common-socket</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.helidon.common</groupId>
+      <artifactId>helidon-common-context</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.helidon.http.media</groupId>
       <artifactId>helidon-http-media</artifactId>
     </dependency>

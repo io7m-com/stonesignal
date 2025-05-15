@@ -346,7 +346,7 @@ public class StServerDeviceTest
         final var request =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10000/1/0/device-location-put"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .header("Authorization", "Bearer " + device.key().key())
             .POST(
               HttpRequest.BodyPublishers.ofByteArray(
@@ -364,7 +364,7 @@ public class StServerDeviceTest
         final var request =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10000/1/0/device-location-put"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .header("Authorization", "Bearer ")
             .POST(
               HttpRequest.BodyPublishers.ofByteArray(
@@ -382,7 +382,7 @@ public class StServerDeviceTest
         final var request =
           HttpRequest.newBuilder(
               URI.create("http://localhost:10000/1/0/device-location-put"))
-            .header("Content-Type", "application/stonesignal+cbor")
+            .header("Content-Type", "application/vnd.stonesignal+cbor")
             .POST(
               HttpRequest.BodyPublishers.ofByteArray(
                 mapper.writeValueAsBytes(cmd)

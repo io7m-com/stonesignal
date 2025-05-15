@@ -34,13 +34,13 @@ public enum StFormat
    * JSON format.
    */
 
-  JSON(HttpMediaType.create("application/stonesignal+json")),
+  JSON(HttpMediaType.create("application/vnd.stonesignal+json")),
 
   /**
    * CBOR format.
    */
 
-  CBOR(HttpMediaType.create("application/stonesignal+cbor"));
+  CBOR(HttpMediaType.create("application/vnd.stonesignal+cbor"));
 
   private final HttpMediaType mediaType;
 
