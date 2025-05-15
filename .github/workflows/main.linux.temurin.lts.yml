@@ -50,7 +50,7 @@ jobs:
           path: ./com.io7m.stonesignal.tests/target/surefire-reports
 
       - name: Coverage
-        uses: codecov/codecov-action@v5.4.2
+        uses: codecov/codecov-action@525fcbf8a05e5933b1ef3c7885da8fd1d7231920
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: com.io7m.stonesignal.tests/target/site/jacoco-aggregate/jacoco.xml
