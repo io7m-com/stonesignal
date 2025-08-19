@@ -38,6 +38,7 @@ public record StDeviceLocation(
   long id,
   UUID device,
   OffsetDateTime time,
+  OffsetDateTime deviceTime,
 
   @JsonProperty(value = "Accuracy", defaultValue = "0.0")
   @JsonPropertyDescription(
@@ -113,6 +114,7 @@ public record StDeviceLocation(
       id,
       device,
       time,
+      OffsetDateTime.parse(data.get("DeviceTime")),
       doubleOf(data, "Accuracy"),
       doubleOf(data, "Altitude"),
       doubleOf(data, "Bearing"),
@@ -144,6 +146,7 @@ public record StDeviceLocation(
       Map.entry("Altitude", Double.toString(this.altitude)),
       Map.entry("Bearing", Double.toString(this.bearing)),
       Map.entry("BearingAccuracy", Double.toString(this.bearingAccuracy)),
+      Map.entry("DeviceTime", this.deviceTime.toString()),
       Map.entry("Latitude", Double.toString(this.latitude)),
       Map.entry("Longitude", Double.toString(this.longitude)),
       Map.entry("MSLAltitude", Double.toString(this.mslAltitude)),

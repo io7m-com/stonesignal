@@ -84,6 +84,7 @@ public final class St1DeviceLocationPut
         0L,
         state.device().id(),
         this.clock.nowPrecise(),
+        data.deviceTime(),
         data.accuracy(),
         data.altitude(),
         data.bearing(),

@@ -64,6 +64,7 @@ public final class StDBDeviceLocationUpdatePut
 
     context.insertInto(DEVICE_LOCATION_UPDATES)
       .set(DEVICE_LOCATION_UPDATES.DLU_TIME, update.time())
+      .set(DEVICE_LOCATION_UPDATES.DLU_DEVICE_TIME, update.deviceTime())
       .set(DEVICE_LOCATION_UPDATES.DLU_DEVICE, update.device())
       .set(DEVICE_LOCATION_UPDATES.DLU_DATA, this.metadataJson(update.toMap()))
       .execute();

@@ -280,7 +280,10 @@ public class StDatabaseTest
             0L,
             device.id(),
             time,
-            Map.of("Speed", "1.0")
+            Map.ofEntries(
+              Map.entry("Speed", "1.0"),
+              Map.entry("DeviceTime", OffsetDateTime.now().toString())
+            )
           )
         );
       }
@@ -399,7 +402,10 @@ public class StDatabaseTest
             0L,
             device.id(),
             time,
-            Map.of("Speed", data)
+            Map.ofEntries(
+              Map.entry("Speed", "1.0"),
+              Map.entry("DeviceTime", OffsetDateTime.now().toString())
+            )
           ));
           highestData.put(device.id(), data);
           highestTime.put(device.id(), time);

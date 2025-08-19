@@ -52,6 +52,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Clock;
+import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -205,6 +206,7 @@ public class StServerDeviceTest
             HttpRequest.BodyPublishers.ofString(
               mapper.writeValueAsString(
                 new St1DeviceLocationUpdate(
+                  OffsetDateTime.parse("2025-08-19T16:57:09+00:00"),
                   1.0,
                   2.0,
                   3.0,
@@ -246,6 +248,7 @@ public class StServerDeviceTest
     try (final var client = HttpClient.newHttpClient()) {
       final var cmd =
         new St1DeviceLocationUpdate(
+          OffsetDateTime.parse("2025-08-19T16:57:09+00:00"),
         1.0,
         2.0,
         3.0,
@@ -330,6 +333,7 @@ public class StServerDeviceTest
     try (final var client = HttpClient.newHttpClient()) {
       final var cmd =
         new St1DeviceLocationUpdate(
+          OffsetDateTime.parse("2025-08-19T16:57:09+00:00"),
           1.0,
           2.0,
           3.0,

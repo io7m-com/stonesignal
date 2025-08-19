@@ -788,6 +788,7 @@ public class StServerDataTest
                 "Bearer " + device.deviceKey())
               .POST(HttpRequest.BodyPublishers.ofByteArray(
                 deviceMapper.writeValueAsBytes(new St1DeviceLocationUpdate(
+                  OffsetDateTime.parse("2025-08-19T16:57:09+00:00"),
                   index,
                   index,
                   index,
@@ -889,6 +890,7 @@ public class StServerDataTest
                 "Bearer " + device.deviceKey())
               .POST(HttpRequest.BodyPublishers.ofByteArray(
                 deviceMapper.writeValueAsBytes(new St1DeviceLocationUpdate(
+                  OffsetDateTime.parse("2025-08-19T16:57:09+00:00"),
                   index,
                   index,
                   index,
@@ -1005,6 +1007,7 @@ public class StServerDataTest
                 "Bearer " + device.deviceKey())
               .POST(HttpRequest.BodyPublishers.ofByteArray(
                 deviceMapper.writeValueAsBytes(new St1DeviceLocationUpdate(
+                  OffsetDateTime.parse("2025-08-19T16:57:09+00:00"),
                   index,
                   index,
                   index,
@@ -1109,6 +1112,7 @@ public class StServerDataTest
                 "Bearer " + device.deviceKey())
               .POST(HttpRequest.BodyPublishers.ofByteArray(
                 deviceMapper.writeValueAsBytes(new St1DeviceLocationUpdate(
+                  OffsetDateTime.parse("2025-08-19T16:57:09+00:00"),
                   index,
                   index,
                   index,

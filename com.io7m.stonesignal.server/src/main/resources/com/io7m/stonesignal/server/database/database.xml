@@ -103,10 +103,11 @@ GRANT SELECT (device_id, device_name, device_metadata, device_deleted) ON device
 
     <Statement><![CDATA[
 CREATE TABLE device_location_updates (
-  dlu_id      BIGINT                    NOT NULL GENERATED ALWAYS AS IDENTITY,
-  dlu_device  UUID                      NOT NULL,
-  dlu_time    TIMESTAMP WITH TIME ZONE  NOT NULL,
-  dlu_data    JSONB                     NOT NULL,
+  dlu_id           BIGINT                    NOT NULL GENERATED ALWAYS AS IDENTITY,
+  dlu_device       UUID                      NOT NULL,
+  dlu_time         TIMESTAMP WITH TIME ZONE  NOT NULL,
+  dlu_data         JSONB                     NOT NULL,
+  dlu_device_time  TIMESTAMP WITH TIME ZONE  NOT NULL,
 
   CONSTRAINT device_location_updates_id_primary_key
     PRIMARY KEY (dlu_id),

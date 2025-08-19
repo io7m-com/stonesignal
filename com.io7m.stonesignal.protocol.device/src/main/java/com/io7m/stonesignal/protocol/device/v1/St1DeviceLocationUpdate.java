@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 /**
@@ -32,6 +33,11 @@ import java.util.Map;
 @JsonSerialize
 @JsonDeserialize
 public record St1DeviceLocationUpdate(
+  @JsonProperty(value = "DTIME", required = true)
+  @JsonPropertyDescription(
+    "The time the location was recorded on the device.")
+  OffsetDateTime deviceTime,
+
   @JsonProperty(value = "ACC", defaultValue = "0.0")
   @JsonPropertyDescription(
     "The estimated horizontal accuracy radius in meters of this location.")
@@ -103,6 +109,7 @@ public record St1DeviceLocationUpdate(
       Map.entry("Altitude", Double.toString(this.altitude)),
       Map.entry("Bearing", Double.toString(this.bearing)),
       Map.entry("BearingAccuracy", Double.toString(this.bearingAccuracy)),
+      Map.entry("DeviceTime", this.deviceTime.toString()),
       Map.entry("Latitude", Double.toString(this.latitude)),
       Map.entry("Longitude", Double.toString(this.longitude)),
       Map.entry("MSLAltitude", Double.toString(this.mslAltitude)),
