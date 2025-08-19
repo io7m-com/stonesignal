@@ -21,6 +21,7 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -76,6 +77,7 @@ public final class StDBDeviceLocationUpdateSearch
           DEVICE_LOCATION_UPDATES.DLU_ID,
           DEVICE_LOCATION_UPDATES.DLU_DEVICE,
           DEVICE_LOCATION_UPDATES.DLU_TIME,
+          DEVICE_LOCATION_UPDATES.DLU_DEVICE_TIME,
           DEVICE_LOCATION_UPDATES.DLU_DATA
         )
         .from(DEVICE_LOCATION_UPDATES)
@@ -91,15 +93,24 @@ public final class StDBDeviceLocationUpdateSearch
       this.objectMapper();
 
     for (final var rec : r) {
+      final var map =
+        new HashMap<String, String>(
+          mapper.readValue(
+            rec.get(DEVICE_LOCATION_UPDATES.DLU_DATA).data(),
+            Map.class
+          )
+        );
+      map.put(
+        "DeviceTime",
+        rec.get(DEVICE_LOCATION_UPDATES.DLU_DEVICE_TIME).toString()
+      );
+
       results.add(
         StDeviceLocation.fromMap(
           rec.get(DEVICE_LOCATION_UPDATES.DLU_ID),
           rec.get(DEVICE_LOCATION_UPDATES.DLU_DEVICE),
           rec.get(DEVICE_LOCATION_UPDATES.DLU_TIME),
-          mapper.readValue(
-            rec.get(DEVICE_LOCATION_UPDATES.DLU_DATA).data(),
-            Map.class
-          )
+          map
         )
       );
     }
