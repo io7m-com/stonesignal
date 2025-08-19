@@ -91,6 +91,7 @@ public final class St1DataHDeviceLocationsGet
     return new St1DataLocation(
       value.id(),
       value.time(),
+      value.deviceTime(),
       value.accuracy(),
       value.altitude(),
       value.bearing(),

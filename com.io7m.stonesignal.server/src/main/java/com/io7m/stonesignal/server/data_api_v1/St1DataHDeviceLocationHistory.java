@@ -95,6 +95,7 @@ public final class St1DataHDeviceLocationHistory
     return new St1DataLocation(
       value.id(),
       value.time(),
+      value.deviceTime(),
       value.accuracy(),
       value.altitude(),
       value.bearing(),

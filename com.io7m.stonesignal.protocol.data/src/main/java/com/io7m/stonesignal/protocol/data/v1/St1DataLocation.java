@@ -44,6 +44,11 @@ public record St1DataLocation(
     "The time the update was received.")
   OffsetDateTime time,
 
+  @JsonProperty(value = "DeviceTime", required = true)
+  @JsonPropertyDescription(
+    "The time the update was sent on the device.")
+  OffsetDateTime deviceTime,
+
   @JsonProperty(value = "Accuracy", defaultValue = "0.0")
   @JsonPropertyDescription(
     "The estimated horizontal accuracy radius in meters of this location.")
@@ -106,6 +111,7 @@ public record St1DataLocation(
   public Map<String, String> toMap()
   {
     return Map.ofEntries(
+      Map.entry("DeviceTime", this.deviceTime.toString()),
       Map.entry("Accuracy", Double.toString(this.accuracy)),
       Map.entry("Altitude", Double.toString(this.altitude)),
       Map.entry("Bearing", Double.toString(this.bearing)),
