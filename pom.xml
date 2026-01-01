@@ -54,7 +54,7 @@
 
     <!-- Third-party dependencies. -->
     <com.fasterxml.jackson.version>2.20.1</com.fasterxml.jackson.version>
-    <io.helidon.version>4.3.1</io.helidon.version>
+    <io.helidon.version>4.3.2</io.helidon.version>
     <io.opentelemetry.version>1.57.0</io.opentelemetry.version>
     <org.jooq.version>3.20.8</org.jooq.version>
     <org.postgresql.version>42.7.8</org.postgresql.version>
