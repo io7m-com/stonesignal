@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
     <artifactId>com.io7m.primogenitor.lite</artifactId>
-    <version>9.1.0</version>
+    <version>9.2.0</version>
   </parent>
 
   <groupId>com.io7m.stonesignal</groupId>
@@ -49,7 +49,7 @@
     <com.io7m.repetoir.version>1.0.1</com.io7m.repetoir.version>
     <com.io7m.trasco.version>3.1.1</com.io7m.trasco.version>
     <com.io7m.ventrad.version>1.0.0</com.io7m.ventrad.version>
-    <com.io7m.xstructural.version>1.9.0</com.io7m.xstructural.version>
+    <com.io7m.xstructural.version>2.0.1</com.io7m.xstructural.version>
     <com.io7m.zelador.version>1.0.0</com.io7m.zelador.version>
 
     <!-- Third-party dependencies. -->
@@ -317,7 +317,7 @@
       <dependency>
         <groupId>com.io7m.primogenitor</groupId>
         <artifactId>com.io7m.primogenitor.support</artifactId>
-        <version>9.1.0</version>
+        <version>9.2.0</version>
       </dependency>
 
       <dependency>
